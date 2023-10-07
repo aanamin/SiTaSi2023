@@ -3,7 +3,7 @@ const {sequelize, DataTypes, err} = require('sequelize')
 const db = require('../config/dbConfig.js')
 const signature = require('./signature.js')
 
-var user = db.define('user',{
+var user = db.define('mahasiswa',{
     id : {
         type        : DataTypes.STRING,
         allowNull   : false,
