@@ -6,8 +6,8 @@ const dosen = require('./dosen.js')
 Signature.belongsTo(Documents, { foreignKey: 'document_id' });
 Documents.hasMany(Signature, { foreignKey: 'document_id' });
 
-Signature.belongsTo(mahasiswa, {as: 'Sender', foreignKey: 'user_id' });
-Signature.belongsTo(mahasiswa, {as: 'Receiver', foreignKey: 'id_tujuan' });
+tugasAkhir.hasMany(mahasiswa, {as: 'Sender', foreignKey: 'user_id' });
+tugasAkhir.hasMany(mahasiswa, {as: 'Receiver', foreignKey: 'id_tujuan' });
 mahasiswa.hasMany(Signature, {as: 'Sender', foreignKey: 'user_id' });
 mahasiswa.hasMany(Signature, {as: 'Receiver', foreignKey: 'ied_tujuan' });
 
