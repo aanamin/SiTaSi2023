@@ -222,23 +222,23 @@ function generateAccessToken(email) {
 controllers.login = async (req, res) => {
     try {
         const {
-            email,
+            nim,
             password
         } = req.body
-        const pengguna = await user.findOne({
+        const mahasiswa = await models.mahasiswa.findOne({
             where: {
-                email: req.body.email
+                nim: req.body.nim
             }
         });
 
-        if (!pengguna) {
+        if (!mahasiswa) {
 
             return res.status(400).json({
                 message: 'Invalid'
             });
         }
 
-        if (password != pengguna.password) {
+        if (password != mahasiswa.password) {
 
             return res.status(400).json({
                 message: 'Password Anda Salah'

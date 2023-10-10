@@ -12,11 +12,13 @@ var tugasAkhir = db.define('tugasAkhir',{
     },
     id_mahasiswa : {
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : false,
+        primaryKey:true
     },
     id_dosbing : {
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : false,
+        primaryKey:true
     },
     id_dospeng : {
         type        : DataTypes.STRING,
