@@ -4,12 +4,6 @@ const db = require('../config/dbConfig.js')
 const signature = require('./dosen.js')
 
 var tugasAkhir = db.define('tugasAkhir',{
-    id : {
-        type        : DataTypes.STRING,
-        allowNull   : false,
-        primaryKey  : true,
-        autoIncrement: false
-    },
     id_mahasiswa : {
         type        : DataTypes.STRING,
         allowNull   : false,
@@ -53,6 +47,10 @@ var tugasAkhir = db.define('tugasAkhir',{
         allowNull   : false
     },
     bab6 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    full :{
         type        : DataTypes.STRING,
         allowNull   : false
     },

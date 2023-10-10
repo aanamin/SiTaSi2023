@@ -37,9 +37,9 @@ controllers.logout = async (req, res) => {
         const userId = req.user.id
         await models.user.update({
             active: 0,
-        },{
-            where:{
-                id:userId
+        }, {
+            where: {
+                id: userId
             }
         })
         req.session.destroy((err) => {
@@ -52,7 +52,7 @@ controllers.logout = async (req, res) => {
             }
 
             res.clearCookie('accessToken');
-            
+
             res.render('login')
         });
     } catch (error) {
@@ -117,27 +117,30 @@ controllers.upsignature = async (req, res) => {
 
 controllers.changepw = async (req, res) => {
     try {
-        const {password, newpassword }= req.body
+        const {
+            password,
+            newpassword
+        } = req.body
         const userId = req.user.id
         const user = await models.user.findOne({
-            where:{
+            where: {
                 id: userId
             }
         })
-        if(password != user.password){
+        if (password != user.password) {
             return res.status(403).json({
                 message: 'masukkan password yang benar'
             })
-        } 
+        }
         await models.user.update({
             password: newpassword,
-        },{
-            where:{
-                id:userId
+        }, {
+            where: {
+                id: userId
             }
         })
         return res.status(201).json({
-            msg:"Password anda telah diperbarui",
+            msg: "Password anda telah diperbarui",
         })
     } catch (error) {
         console.log(error)
@@ -214,23 +217,55 @@ controllers.register = async (req, res) => {
     }
 }
 
-function generateAccessToken(email) {
-    return jwt.sign(email, process.env.SECRET_TOKEN, {
+function generateAccessToken(nomorinduk) {
+    return jwt.sign(nomorinduk, process.env.SECRET_TOKEN, {
         expiresIn: '6000S'
     });
 }
 controllers.login = async (req, res) => {
     try {
         const {
-            nim,
+            nomorinduk,
             password
         } = req.body
         const mahasiswa = await models.mahasiswa.findOne({
             where: {
-                nim: req.body.nim
+                nim: nomorinduk
             }
         });
 
+        if (mahasiswa) {
+            if (password == mahasiswa.password) {
+                const nim = mahasiswa.nim
+                if (!req.session.user) {
+                    req.session.user = {};
+                }
+                await models.mahasiswa.update({
+                    active: 1,
+                }, {
+                    where: {
+                        id: id
+                    }
+                })
+                req.session.user.id = nim;
+                const token = generateAccessToken({
+                    nim,
+                    nomorinduk
+                }, process.env.SECRET_TOKEN);
+                // const token = generateAccessToken({email: req.body.email})
+
+
+                res.cookie("accessToken", token, {
+                    httpOnly: true,
+                    maxAge: 100 * 60 * 1000,
+                })
+                res.status(200).json({
+                    token: token,
+                    msg: 'Login Berhasil',
+                    success: true
+                });
+            }
+        }
         if (!mahasiswa) {
 
             return res.status(400).json({
@@ -246,34 +281,7 @@ controllers.login = async (req, res) => {
 
         }
 
-        const id = pengguna.id
-        if (!req.session.user) {
-            req.session.user = {};
-        }
-        await models.user.update({
-            active: 1,
-        },{
-            where:{
-                id:id
-            }
-        })
-        req.session.user.id = id;
-        const token = generateAccessToken({
-            id,
-            email
-        }, process.env.SECRET_TOKEN);
-        // const token = generateAccessToken({email: req.body.email})
 
-        
-        res.cookie("accessToken", token, {
-            httpOnly: true,
-            maxAge: 100 * 60 * 1000,
-        })
-        res.status(200).json({
-            token: token,
-            msg: 'Login Berhasil',
-            success: true
-        });
     } catch (error) {
         console.log(error)
         res.status(400).json({
