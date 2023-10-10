@@ -2,15 +2,16 @@
 const {sequelize, DataTypes, err} = require('sequelize')
 const db = require('../config/dbConfig.js')
 const signature = require('./signature.js')
+const { mahasiswa } = require('./index.js')
 
 var user = db.define('mahasiswa',{
-    id : {
+    nim : {
         type        : DataTypes.STRING,
         allowNull   : false,
         primaryKey  : true,
         autoIncrement: false
     },
-    username : {
+    nama : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
@@ -25,11 +26,6 @@ var user = db.define('mahasiswa',{
     active :{
         type        :DataTypes.INTEGER,
         allowNull   :true
-    },
-    sign_img :{
-        type        : DataTypes.STRING,
-        allowNull   : true
-        
     },
     created_at : {
         type        : DataTypes.DATEONLY,
@@ -47,4 +43,4 @@ var user = db.define('mahasiswa',{
 })
 
 // user.hasMany(signature);
-module.exports = user
+module.exports = mahasiswa

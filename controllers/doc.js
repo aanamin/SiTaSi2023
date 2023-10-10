@@ -2,7 +2,7 @@
 const {
     or, where
 } = require('sequelize');
-const documents = require('../models/documents');
+const documents = require('../models/tugasAkhir');
 const user = require('../models/user')
 const models = require('../models/index');
 const controller = {}

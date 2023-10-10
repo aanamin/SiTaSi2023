@@ -61,29 +61,7 @@ controllers.logout = async (req, res) => {
 
 }
 
-controllers.tampilUpsignature = async (req, res) => {
 
-    try {
-
-        const userId = req.user.id
-        const userProfile = await user.findOne({
-            where: {
-                id: userId
-            }
-        })
-        if (!userProfile) {
-            return res.status(404).json({
-                message: 'Profil pengguna tidak ditemukan.'
-            });
-        }
-        res.render('upsignature', {
-            user: userProfile
-        });
-    } catch (error) {
-        console.log(error)
-    }
-
-}
 
 controllers.upsignature = async (req, res) => {
     try {

@@ -4,7 +4,7 @@ const {
 } = require('sequelize');
 const signature = require('../models/signature');
 const user = require('../models/user')
-const documents = require('../models/documents');
+const documents = require('../models/tugasAkhir');
 const models = require('../models/index');
 const controllers = {}
 const jwt = require('jsonwebtoken')

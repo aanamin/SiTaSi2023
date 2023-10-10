@@ -3,26 +3,54 @@ const {sequelize, DataTypes, err} = require('sequelize')
 const db = require('../config/dbConfig.js')
 const signature = require('./signature.js')
 
-var documents = db.define('documents',{
+var tugasAkhir = db.define('tugasAkhir',{
     id : {
         type        : DataTypes.STRING,
         allowNull   : false,
         primaryKey  : true,
         autoIncrement: false
     },
-    id_user : {
+    id_mahasiswa : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    name : {
+    id_dosbing : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    filename : {
+    id_dospeng : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    description :{
+    judul :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    proposal :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab1 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab2 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab3 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab4 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab5 :{
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
+    bab6 :{
         type        : DataTypes.STRING,
         allowNull   : false
     },
@@ -44,4 +72,4 @@ var documents = db.define('documents',{
 })
 
 
-module.exports = documents
+module.exports = tugasAkhir
