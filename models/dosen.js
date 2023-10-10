@@ -4,24 +4,19 @@ const db = require('../config/dbConfig.js');
 const documents = require('./tugasAkhir.js');
 const user = require('./mahasiswa.js')
 
-var signature = db.define('signature',{
-    user_id : {
+var dosen = db.define('dosen',{
+    nip : {
         type        : DataTypes.STRING,
         allowNull   : false,
         primaryKey  : true,
         autoIncrement: false
     },
-    document_id : {
+    nama : {
         type        : DataTypes.STRING,
         allowNull   : false,
-        primaryKey  : true,
         autoIncrement: false
     },
-    id_tujuan : {
-        type        : DataTypes.STRING,
-        allowNull   : false
-    },
-    jabatan : {
+    password : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
@@ -49,4 +44,4 @@ var signature = db.define('signature',{
 });
 
 
-module.exports = signature
+module.exports = dosen

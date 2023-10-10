@@ -1,7 +1,7 @@
 const db = require('../config/dbConfig.js')
 const mahasiswa = require('./mahasiswa.js')
-const Documents = require('./tugasAkhir.js')
-const Signature = require('./signature.js')
+const tugasAkhir = require('./tugasAkhir.js')
+const dosen = require('./dosen.js')
 
 Signature.belongsTo(Documents, { foreignKey: 'document_id' });
 Documents.hasMany(Signature, { foreignKey: 'document_id' });
