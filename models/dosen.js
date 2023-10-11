@@ -11,7 +11,7 @@ var dosen = db.define('dosen',{
         primaryKey  : true,
         autoIncrement: false
     },
-    nama : {
+    nama_dosen : {
         type        : DataTypes.STRING,
         allowNull   : false,
         autoIncrement: false
@@ -28,10 +28,6 @@ var dosen = db.define('dosen',{
     status :{
         type        : DataTypes.STRING,
         allowNull   : true 
-    },
-    signed_at : {
-        type        : DataTypes.DATEONLY,
-        allowNull   : true
     },
     created_at : {
         type        : DataTypes.DATEONLY,

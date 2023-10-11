@@ -11,7 +11,7 @@ var mahasiswa = db.define('mahasiswa',{
         primaryKey  : true,
         autoIncrement: false
     },
-    nama : {
+    nama_mahasiswa : {
         type        : DataTypes.STRING,
         allowNull   : false
     },
