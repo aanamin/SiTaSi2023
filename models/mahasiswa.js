@@ -15,6 +15,10 @@ var mahasiswa = db.define('mahasiswa',{
         type        : DataTypes.STRING,
         allowNull   : false
     },
+    jenis_kelamin : {
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
     
     password :{
         type        : DataTypes.STRING,
