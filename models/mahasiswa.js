@@ -20,10 +20,6 @@ var mahasiswa = db.define('mahasiswa',{
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    active :{
-        type        :DataTypes.INTEGER,
-        allowNull   :true
-    },
     created_at : {
         type        : DataTypes.DATEONLY,
         allowNull   : false
