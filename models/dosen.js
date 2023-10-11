@@ -16,6 +16,11 @@ var dosen = db.define('dosen',{
         allowNull   : false,
         autoIncrement: false
     },
+    jenis_kelamin : {
+        type        : DataTypes.STRING,
+        allowNull   : false,
+        autoIncrement: false
+    },
     password : {
         type        : DataTypes.STRING,
         allowNull   : false

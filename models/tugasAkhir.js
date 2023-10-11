@@ -16,45 +16,49 @@ var tugasAkhir = db.define('tugasAkhir',{
     },
     id_dospeng : {
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     judul :{
         type        : DataTypes.STRING,
         allowNull   : false
     },
+    detail_ide:{
+        type        :DataTypes.STRING,
+        allowNull:false
+    },
     proposal :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab1 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab2 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab3 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab4 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab5 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     bab6 :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
     full :{
         type        : DataTypes.STRING,
-        allowNull   : false
+        allowNull   : true
     },
-    
+
     created_at : {
         type        : DataTypes.DATE,
         allowNull   : false
