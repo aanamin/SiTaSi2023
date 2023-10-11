@@ -62,6 +62,14 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.STRING,
         allowNull   : true
     },
+    tanggal_semhas  :{
+        type        :DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    tanggal_sidang  :{
+        type        :DataTypes.DATEONLY,
+        allowNull   : true
+    },
 
     created_at : {
         type        : DataTypes.DATE,
