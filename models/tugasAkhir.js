@@ -4,7 +4,7 @@ const db = require('../config/dbConfig.js')
 const signature = require('./dosen.js')
 
 var tugasAkhir = db.define('tugasAkhir',{
-    id_mahasiswa : {
+    nim : {
         type        : DataTypes.STRING,
         allowNull   : false,
         primaryKey:true

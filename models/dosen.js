@@ -1,8 +1,6 @@
 
 const {sequelize, DataTypes, err} = require('sequelize')
 const db = require('../config/dbConfig.js');
-const documents = require('./tugasAkhir.js');
-const user = require('./mahasiswa.js')
 
 var dosen = db.define('dosen',{
     nip : {
@@ -24,10 +22,6 @@ var dosen = db.define('dosen',{
     password : {
         type        : DataTypes.STRING,
         allowNull   : false
-    },
-    status :{
-        type        : DataTypes.STRING,
-        allowNull   : true 
     },
     created_at : {
         type        : DataTypes.DATEONLY,

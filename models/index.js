@@ -3,21 +3,19 @@ const mahasiswa = require('./mahasiswa.js')
 const tugasAkhir = require('./tugasAkhir.js')
 const dosen = require('./dosen.js')
 
-Signature.belongsTo(Documents, { foreignKey: 'document_id' });
-Documents.hasMany(Signature, { foreignKey: 'document_id' });
 
-tugasAkhir.hasMany(dosen, {as: 'dosbing', foreignKey: 'id_dosbing' });
-tugasAkhir.hasMany(dosen, {as: 'dospeng', foreignKey: 'id_dospeng' });
-dosen.belongsTo(tugasAkhir, {as: 'dosbing', foreignKey: 'id_dosbing' });
-dosen.belongsTo(tugasAkhir, {as: 'dospeng', foreignKey: 'id_dospeng' });
+tugasAkhir.belongsTo(dosen, {as: 'dosbing', foreignKey: 'id_dosbing' });
+tugasAkhir.belongsTo(dosen, {as: 'dospeng', foreignKey: 'id_dospeng' });
+dosen.hasMany(tugasAkhir, {as: 'dosbing', foreignKey: 'id_dosbing' });
+dosen.hasMany(tugasAkhir, {as: 'dospeng', foreignKey: 'id_dospeng' });
 
-mahasiswa.hasMany(Documents, { foreignKey: 'id_user' });
-Documents.belongsTo(mahasiswa, { foreignKey: 'id_user' });
+tugasAkhir.belongsTo(mahasiswa, { foreignKey: 'nim' });
+mahasiswa.belongsTo(tugasAkhir, { foreignKey: 'nim' });
 
 const models = {}
 models.mahasiswa = mahasiswa
-models.documents = Documents
-models.signature = Signature
+models.dosen = dosen
+models.tugasAkhir = tugasAkhir
 
 
 module.exports = models

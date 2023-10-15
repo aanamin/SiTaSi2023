@@ -2,7 +2,6 @@
 const {sequelize, DataTypes, err} = require('sequelize')
 const db = require('../config/dbConfig.js')
 const signature = require('./dosen.js')
-const { mahasiswa } = require('./index.js')
 
 var mahasiswa = db.define('mahasiswa',{
     nim : {

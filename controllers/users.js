@@ -1,12 +1,13 @@
+const dosen = require('../models/dosen')
 const models = require('../models/index')
 const bcrypt = require('bcryptjs')
-const user = require('../models/user')
 const jwt = require('jsonwebtoken')
 const dotenv = require('dotenv')
-const fs = require('fs')
+// const fs = require('fs')
 const {
     v4: uuidv4
 } = require('uuid');
+const admin = require('../models/admin')
 
 dotenv.config();
 process.env.SECRET_TOKEN;
@@ -228,29 +229,39 @@ controllers.login = async (req, res) => {
             nomorinduk,
             password
         } = req.body
+
+        
         const mahasiswa = await models.mahasiswa.findOne({
             where: {
                 nim: nomorinduk
             }
         });
+        const isdosen = await dosen.findOne({
+            where: {
+                nip: nomorinduk
+            }
+        });
+        const isadmin = await admin.findOne({
+            where:{
+                niu : nomorinduk
+            }
 
+        })
+
+// jika yang login mahasiswa
         if (mahasiswa) {
             if (password == mahasiswa.password) {
+                // res.status(200).json({ message: 'Autentikasi mahasiswa berhasil' });
                 const nim = mahasiswa.nim
                 if (!req.session.user) {
                     req.session.user = {};
                 }
-                await models.mahasiswa.update({
-                    active: 1,
-                }, {
-                    where: {
-                        id: id
-                    }
-                })
-                req.session.user.id = nim;
+              
+                req.session.user.id ={
+                    id:nim
+                } 
                 const token = generateAccessToken({
-                    nim,
-                    nomorinduk
+                    nim
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
 
@@ -265,22 +276,86 @@ controllers.login = async (req, res) => {
                     success: true
                 });
             }
-        }
-        if (!mahasiswa) {
+            if (password != mahasiswa.password) {
 
-            return res.status(400).json({
-                message: 'Invalid'
-            });
-        }
+                return res.status(400).json({
+                    message: 'Password Anda Salah'
+                });
+    
+            }
+            
+        }else if (isdosen) {
+            if (password == isdosen.password) {
+                // res.status(200).json({ message: 'Autentikasi isdosen berhasil' });
+                const nip = isdosen.nip
+                if (!req.session.user) {
+                    req.session.user = {};
+                }
+              
+                req.session.user.id ={
+                    id:nip
+                } 
+                const token = generateAccessToken({
+                    nip
+                }, process.env.SECRET_TOKEN);
+                // const token = generateAccessToken({email: req.body.email})
 
-        if (password != mahasiswa.password) {
 
-            return res.status(400).json({
-                message: 'Password Anda Salah'
-            });
+                res.cookie("accessToken", token, {
+                    httpOnly: true,
+                    maxAge: 100 * 60 * 1000,
+                })
+                res.status(200).json({
+                    token: token,
+                    msg: 'Login Berhasil',
+                    success: true
+                });
+            }
+            if (password != isdosen.password) {
 
-        }
+                return res.status(400).json({
+                    message: 'Password Anda Salah'
+                });
+    
+            }
+        }else if (isadmin) {
+            if (password == isadmin.password) {
+                // res.status(200).json({ message: 'Autentikasi isadmin berhasil' });
+                const niu = isadmin.niu
+                if (!req.session.user) {
+                    req.session.user = {};
+                }
+              
+                req.session.user.id ={
+                    id:niu
+                } 
+                const token = generateAccessToken({
+                    niu
+                }, process.env.SECRET_TOKEN);
+                // const token = generateAccessToken({email: req.body.email})
 
+
+                res.cookie("accessToken", token, {
+                    httpOnly: true,
+                    maxAge: 100 * 60 * 1000,
+                })
+                res.status(200).json({
+                    token: token,
+                    msg: 'Login Berhasil',
+                    success: true
+                });
+            }
+            if (password != isadmin.password) {
+
+                return res.status(400).json({
+                    message: 'Password Anda Salah'
+                });
+    
+            }
+        }  
+       
+
+        
 
     } catch (error) {
         console.log(error)
