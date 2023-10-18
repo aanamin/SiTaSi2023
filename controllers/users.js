@@ -172,11 +172,6 @@ controllers.profil = async (req, res) => {
 }
 
 
-controllers.getAllUser = async (req, res) => {
-    const users = await models.user.findAll({})
-    res.status(200).send(users)
-}
-
 
 controllers.register = async (req, res) => {
     try {

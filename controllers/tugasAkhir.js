@@ -23,21 +23,361 @@ controller.tampilAllProgress = async (req, res) => {
         console.log('NIM Mahasiswa:', nimMahasiswa);
 
         const progress = await models.tugasAkhir.findAll({
-          where: { nim: nimMahasiswa }
+            where: {
+                nim: nimMahasiswa
+            }
         });
-    
-        if (!progress || progress.length === 0) {
-          return res.status(404).json({ message: 'Data progress tidak ditemukan.' });
-        }
-    
-        res.status(200).json(progress);
-      } catch (error) {
-        console.error('Kesalahan:', error);
-        res.status(500).json({ message: 'Terjadi kesalahan dalam mengambil data progress.' });
-      }
-    
-  };
 
+        if (!progress || progress.length === 0) {
+            return res.status(404).json({
+                message: 'Data progress tidak ditemukan.'
+            });
+        }
+
+        res.status(200).json(progress);
+    } catch (error) {
+        console.error('Kesalahan:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan dalam mengambil data progress.'
+        });
+    }
+
+};
+
+//upload proposal
+controller.uploadproposal = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='proposal'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                proposal : fileName,
+                tanggal_proposal: currentDate,
+                status_proposal: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+
+// upload bab1
+controller.uploadbab1 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab1'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab1 : fileName,
+                tanggal_bab1: currentDate,
+                status_bab1: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+
+//  upload bab2
+controller.uploadbab2 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab2'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab2 : fileName,
+                tanggal_bab2: currentDate,
+                status_bab2: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+
+
+controller.uploadbab3 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab3'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab3 : fileName,
+                tanggal_bab3: currentDate,
+                status_bab3: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+
+//  upload bab4
+controller.uploadbab4 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab4'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab4 : fileName,
+                tanggal_bab4: currentDate,
+                status_bab4: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+//  upload bab5
+controller.uploadbab5 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab5'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab5 : fileName,
+                tanggal_bab5: currentDate,
+                status_bab5: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
+
+//  upload bab6
+controller.uploadbab6 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id
+        if (!req.files || Object.keys(req.files).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        const nama ='bab6'
+        const file = req.files.file;
+        const fileExtension = file.name.split('.').pop();
+        const fileName = `${nama}${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+          }
+        file.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+            await models.tugasAkhir.update({
+                
+                bab6 : fileName,
+                tanggal_bab6: currentDate,
+                status_bab6: 'pengajuan'
+            }, {
+                where: {
+                    nim: nim,
+                }
+            })
+            res.redirect('resources')
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            message: 'Failed to save file information'
+        });
+    }
+}
 
 //read dokumen
 controller.cekDokumen = async (req, res) => {
@@ -81,83 +421,7 @@ controller.tampilBuatDokumen = async (req, res) => {
     }
 }
 
-//create dokumen
-controller.buatDokumen = async (req, res) => {
 
-    try {
-        const userId = req.user.id
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const {
-            name,
-            namaFile,
-            description,
-
-        } = req.body;
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${namaFile}${userId}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-            const countDocs = await documents.count();
-            let docId = `doc${countDocs + 1}`;
-            const idDoc = await models.documents.findOne({
-                where: {
-                    id: docId
-                }
-            })
-            if (!idDoc) {
-                await documents.create({
-                    id: docId,
-                    id_user: userId,
-                    name: name,
-                    filename: fileName,
-                    description: description
-                });
-            }
-            let i = 2;
-            while (idDoc) {
-                let docId = `doc${countDocs + i}`;
-                const dokumen = await models.documents.findOne({
-                    where: {
-                        id: docId
-                    }
-                });
-                if (!dokumen) {
-                    await documents.create({
-                        id: docId,
-                        id_user: userId,
-                        name: name,
-                        filename: fileName,
-                        description: description
-                    });
-                    break;
-                }
-                i++;
-            }
-
-
-
-
-
-            res.redirect('resources')
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: 'Failed to save file information'
-        });
-    }
-}
 
 
 // updatedokumen

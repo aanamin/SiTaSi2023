@@ -6,7 +6,7 @@ const upload = require('../middleware/upload.js')
 const verifyToken = require('../middleware/login.js')
 
 server.get('/dokumen', verifyToken, controller.tugasAkhir.cekDokumen)
-server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.buatDokumen)
+server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.uploadproposal)
 
 server.post('/editResources', verifyToken, controller.tugasAkhir.tampilEditDokumen)
 server.post('/editSources', verifyToken, controller.tugasAkhir.editDokumen)
@@ -15,7 +15,7 @@ server.get('/detailDocuments/:filename', verifyToken, controller.tugasAkhir.deta
 server.get('/detailDocuments/:document_id', verifyToken, controller.tugasAkhir.detailDokumen)
 server.get('/progress',verifyToken, controller.tugasAkhir.tampilAllProgress)
 server.get('/upresources',verifyToken, controller.tugasAkhir.tampilBuatDokumen)
-server.post('/upresources',verifyToken, controller.tugasAkhir.buatDokumen)
+server.post('/upresources',verifyToken, controller.tugasAkhir.uploadproposal)
 
 server.get('/landing',  controller.user.landing)
 server.post('/signup', controller.user.register)
