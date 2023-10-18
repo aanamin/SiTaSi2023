@@ -1,8 +1,10 @@
 // const { now } = require('sequelize/types/utils');
 const {
-    or, where
+    or,
+    where
 } = require('sequelize');
-const documents = require('../models/tugasAkhir');
+const Sequelize = require('sequelize');
+const tugasAkhir = require('../models/tugasAkhir');
 const models = require('../models/index');
 const controller = {}
 const jwt = require('jsonwebtoken')
@@ -14,36 +16,28 @@ const {
 } = require("sequelize");
 
 
-//tampil page All dokumen
-controller.tampilAllDokumen = async (req, res) => {
+//tampil page progress TA page Mahasiswa
+controller.tampilAllProgress = async (req, res) => {
     try {
-        const token = req.cookies.accessToken; // Mengambil token dari cookies
-        const userId = req.user.id;
-        if (!token) {
-            // Jika token tidak ada, kembalikan pesan error atau arahkan ke halaman login
-            return res.status(401).json({
-                message: 'Anda tidak memiliki otorisasi untuk mengakses halaman ini.'
-            });
-            // Atau: res.redirect('/login'); untuk mengarahkan ke halaman login
+        const nimMahasiswa = req.session.user.id;
+        console.log('NIM Mahasiswa:', nimMahasiswa);
+
+        const progress = await models.tugasAkhir.findAll({
+          where: { nim: nimMahasiswa }
+        });
+    
+        if (!progress || progress.length === 0) {
+          return res.status(404).json({ message: 'Data progress tidak ditemukan.' });
         }
+    
+        res.status(200).json(progress);
+      } catch (error) {
+        console.error('Kesalahan:', error);
+        res.status(500).json({ message: 'Terjadi kesalahan dalam mengambil data progress.' });
+      }
+    
+  };
 
-        const dokumen = await models.documents.findAll({
-            where: {
-                id_user: userId
-            }
-        }); // Ambil semua data dokumen dari database
-
-        if (!dokumen) {
-            return res.status(200).json("Tidak dapat ditemukan");
-        }
-
-        res.render('resources', {
-            dokumen
-        }); // Kirim data dokumen ke halaman resources.ejs
-    } catch (error) {
-        res.status(500).send(error);
-    }
-};
 
 //read dokumen
 controller.cekDokumen = async (req, res) => {
@@ -121,7 +115,7 @@ controller.buatDokumen = async (req, res) => {
                     id: docId
                 }
             })
-            if(!idDoc){
+            if (!idDoc) {
                 await documents.create({
                     id: docId,
                     id_user: userId,
@@ -190,7 +184,7 @@ controller.tampilEditDokumen = async (req, res) => {
                 document_id: document_id
             }
         })
-        if(signature){
+        if (signature) {
             const status = signature.status;
             if (status === 'accept') {
                 return res.status(400).json({
@@ -204,14 +198,14 @@ controller.tampilEditDokumen = async (req, res) => {
             }
 
         }
-       
+
         res.render('editUpresources', {
             dokumen: dokumen
         })
     } catch (error) {
         console.log(error)
         res.status(400).json({
-            
+
         })
     }
 }
@@ -273,11 +267,12 @@ controller.editDokumen = async (req, res) => {
                 name: name,
                 filename: fileName,
                 description: description
-            },{where:{
-                id:idDoc,
-                id_user: userId,
-            }}
-            );
+            }, {
+                where: {
+                    id: idDoc,
+                    id_user: userId,
+                }
+            });
 
 
 
@@ -319,7 +314,7 @@ controller.deleteDokumen = async (req, res) => {
                 id
             }
         });
-        
+
         res.redirect('/resources');
 
 

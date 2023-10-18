@@ -62,8 +62,6 @@ controllers.logout = async (req, res) => {
 
 }
 
-
-
 controllers.upsignature = async (req, res) => {
     try {
         const userId = req.user.id;
@@ -183,31 +181,28 @@ controllers.getAllUser = async (req, res) => {
 controllers.register = async (req, res) => {
     try {
         const {
-            username,
-            email,
+            nama,
+            nim,
+            jenisKelamin,
             password
         } = req.body;
 
 
-        const existingUser = await user.findOne({
+        const existingMahasiswa = await models.mahasiswa.findOne({
             where: {
-                email
+                nim: nim
             }
         });
-        if (existingUser) {
+        if (existingMahasiswa) {
             return res.status(400).json({
-                msg: 'Email Sudah Terdaftar'
+                msg: 'Anda Sudah Memiliki Akun'
             });
         }
 
-        const countUsers = await user.count();
-
-        // Membuat ID otomatis dengan format "user+number"
-        const userId = `user${countUsers + 1}`;
-        await user.create({
-            id: userId,
-            username: username,
-            email: email,
+        await models.mahasiswa.create({
+            nama_mahasiswa: nama,
+            nim: nim,
+            jenis_kelamin: jenisKelamin,
             password: password
         });
         res.json({
@@ -230,7 +225,7 @@ controllers.login = async (req, res) => {
             password
         } = req.body
 
-        
+
         const mahasiswa = await models.mahasiswa.findOne({
             where: {
                 nim: nomorinduk
@@ -242,13 +237,13 @@ controllers.login = async (req, res) => {
             }
         });
         const isadmin = await admin.findOne({
-            where:{
-                niu : nomorinduk
+            where: {
+                niu: nomorinduk
             }
 
         })
 
-// jika yang login mahasiswa
+        // jika yang login mahasiswa
         if (mahasiswa) {
             if (password == mahasiswa.password) {
                 // res.status(200).json({ message: 'Autentikasi mahasiswa berhasil' });
@@ -256,10 +251,9 @@ controllers.login = async (req, res) => {
                 if (!req.session.user) {
                     req.session.user = {};
                 }
-              
-                req.session.user.id ={
-                    id:nim
-                } 
+
+                req.session.user.id = nim
+                
                 const token = generateAccessToken({
                     nim
                 }, process.env.SECRET_TOKEN);
@@ -281,20 +275,18 @@ controllers.login = async (req, res) => {
                 return res.status(400).json({
                     message: 'Password Anda Salah'
                 });
-    
+
             }
-            
-        }else if (isdosen) {
+
+        } else if (isdosen) {
             if (password == isdosen.password) {
                 // res.status(200).json({ message: 'Autentikasi isdosen berhasil' });
                 const nip = isdosen.nip
                 if (!req.session.user) {
                     req.session.user = {};
                 }
-              
-                req.session.user.id ={
-                    id:nip
-                } 
+
+                req.session.user.id = nip
                 const token = generateAccessToken({
                     nip
                 }, process.env.SECRET_TOKEN);
@@ -316,19 +308,17 @@ controllers.login = async (req, res) => {
                 return res.status(400).json({
                     message: 'Password Anda Salah'
                 });
-    
+
             }
-        }else if (isadmin) {
+        } else if (isadmin) {
             if (password == isadmin.password) {
                 // res.status(200).json({ message: 'Autentikasi isadmin berhasil' });
                 const niu = isadmin.niu
                 if (!req.session.user) {
                     req.session.user = {};
                 }
-              
-                req.session.user.id ={
-                    id:niu
-                } 
+
+                req.session.user.id = niu
                 const token = generateAccessToken({
                     niu
                 }, process.env.SECRET_TOKEN);
@@ -350,12 +340,9 @@ controllers.login = async (req, res) => {
                 return res.status(400).json({
                     message: 'Password Anda Salah'
                 });
-    
-            }
-        }  
-       
 
-        
+            }
+        }
 
     } catch (error) {
         console.log(error)

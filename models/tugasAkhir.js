@@ -26,7 +26,23 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        :DataTypes.STRING,
         allowNull:false
     },
+    tanggal_judul :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_judul :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
     proposal :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
+    tanggal_proposal :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_proposal :{
         type        : DataTypes.STRING,
         allowNull   : true
     },
@@ -34,7 +50,24 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.STRING,
         allowNull   : true
     },
+    // tanggal pengajuan
+    tanggal_bab1 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab1 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
     bab2 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
+    tanggal_bab2 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab2 :{
         type        : DataTypes.STRING,
         allowNull   : true
     },
@@ -42,7 +75,23 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.STRING,
         allowNull   : true
     },
+    tanggal_bab3 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab3 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
     bab4 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
+    tanggal_bab4 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab4 :{
         type        : DataTypes.STRING,
         allowNull   : true
     },
@@ -50,7 +99,23 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.STRING,
         allowNull   : true
     },
+    tanggal_bab5 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab5 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
     bab6 :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
+    tanggal_bab6 :{
+        type        : DataTypes.DATEONLY,
+        allowNull   : true
+    },
+    status_bab6 :{
         type        : DataTypes.STRING,
         allowNull   : true
     },
