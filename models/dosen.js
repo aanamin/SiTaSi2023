@@ -19,6 +19,10 @@ var dosen = db.define('dosen',{
         allowNull   : false,
         autoIncrement: false
     },
+    kuota_dosbing : {
+        type        : DataTypes.STRING,
+        allowNull   : false
+    },
     password : {
         type        : DataTypes.STRING,
         allowNull   : false

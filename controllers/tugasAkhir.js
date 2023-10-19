@@ -4,7 +4,6 @@ const {
     where
 } = require('sequelize');
 const Sequelize = require('sequelize');
-const tugasAkhir = require('../models/tugasAkhir');
 const models = require('../models/index');
 const controller = {}
 const jwt = require('jsonwebtoken')
@@ -20,7 +19,6 @@ const {
 controller.tampilAllProgress = async (req, res) => {
     try {
         const nimMahasiswa = req.session.user.id;
-        console.log('NIM Mahasiswa:', nimMahasiswa);
 
         const progress = await models.tugasAkhir.findAll({
             where: {
@@ -382,30 +380,159 @@ controller.uploadbab6 = async (req, res) => {
 
 
 
-//tampil buat dokumen
-controller.tampilBuatDokumen = async (req, res) => {
+//tampil buat proposal
+controller.tampilBuatProposal = async (req, res) => {
     try {
 
-        const userId = req.user.id
-        const userProfile = await user.findOne({
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
             where: {
-                id: userId
+                nim: nim
             }
         })
-        if (!userProfile) {
-            return res.status(404).json({
-                message: 'Profil pengguna tidak ditemukan.'
+        if (tugasAkhir.status !== 'judul') {
+            return res.status(403).json({
+                message: 'Submit judul terlebih dahulu'
             });
         }
 
-        res.render('upresources', {
-            user: userProfile
-        });
+       
     } catch (error) {
         console.log(error)
     }
 }
 
+//tampil buat bab1
+controller.tampilBuatBab1 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'judul') {
+            return res.status(403).json({
+                message: 'Submit judul terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//tampil buat bab2
+controller.tampilBuatBab2 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'judul') {
+            return res.status(403).json({
+                message: 'Submit judul terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//tampil buat bab3
+controller.tampilBuatBab3 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'judul') {
+            return res.status(403).json({
+                message: 'Submit judul terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//tampil buat bab4
+controller.tampilBuatBab4 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'proposal') {
+            return res.status(403).json({
+                message: 'Submit proposal terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//tampil buat bab5
+controller.tampilBuatbab5 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'bab4') {
+            return res.status(403).json({
+                message: 'Submit proposal terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+//tampil buat bab6
+controller.tampilBuatbab6 = async (req, res) => {
+    try {
+
+        const nim = req.session.user.id
+        const tugasAkhir = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        })
+        if (tugasAkhir.status !== 'bab4') {
+            return res.status(403).json({
+                message: 'Submit proposal terlebih dahulu'
+            });
+        }
+
+       
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 // updateProposal
 controller.tampilEditProposal = async (req, res) => {
@@ -1039,33 +1166,37 @@ controller.editbab6 = async (req, res) => {
 }
 
 // deletedokumen
-controller.deleteDokumen = async (req, res) => {
+controller.deleteProposal = async (req, res) => {
 
     try {
-        const id = req.params.id;
+        const nim = req.session.user.id;
 
-        const dokumen = await documents.findOne({
+        const proposal = await models.tugasAkhir.findOne({
             where: {
-                id
+                nim:nim
             }
         });
-        if (!dokumen) {
+        if (!proposal) {
             return res.status(404).json({
                 pesan: 'Dokumen tidak ditemukan.'
             });
         }
 
-        const filePath = path.join(__dirname, '..', 'uploads', dokumen.filename);
+        const filePath = path.join(__dirname, '..', 'uploads', proposal.proposal);
 
         fs.unlink(filePath, (err) => {
             if (err) {
                 console.error('Gagal menghapus file:', err);
             }
         });
-      
-
-        res.redirect('/resources');
-
+        await models.tugasAkhir.update({
+            proposal: null,
+            status_proposal: null
+        },{
+            where: {
+                nim:nim
+            }
+        })
 
         return res.json({
             pesan: "berhasil menghapus data"
@@ -1084,41 +1215,5 @@ controller.detailDokumen = async (req, res) => {
     res.sendFile(filePath);
 }
 
-// mencari dokumen
-controller.findDokumen = async (req, res) => {
-    let id = req.body.id;
-    let name = req.body.name;
-    let filename = req.body.filename;
-    let description = req.body.description;
-
-    try {
-        const dokumen = await documents.findAll({
-            where: {
-                [Op.or]: [{
-                    id: {
-                        [Op.substring]: id
-                    }
-                }, {
-                    name: {
-                        [Op.substring]: name
-                    }
-                }, {
-                    filename: {
-                        [Op.substring]: filename
-                    }
-                }, {
-                    description: {
-                        [Op.substring]: description
-                    }
-                }]
-            }
-        })
-        return res.status(200).json(
-            dokumen
-        )
-    } catch (err) {
-
-    }
-}
 
 module.exports = controller
