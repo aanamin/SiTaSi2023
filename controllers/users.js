@@ -248,6 +248,7 @@ controllers.login = async (req, res) => {
                 }
 
                 req.session.user.id = nim
+                req.session.user.type = 'mahasiswa'
                 
                 const token = generateAccessToken({
                     nim
@@ -282,6 +283,8 @@ controllers.login = async (req, res) => {
                 }
 
                 req.session.user.id = nip
+                req.session.user.type = 'dosen'
+
                 const token = generateAccessToken({
                     nip
                 }, process.env.SECRET_TOKEN);
@@ -314,6 +317,7 @@ controllers.login = async (req, res) => {
                 }
 
                 req.session.user.id = niu
+                req.session.user.type = 'admin'
                 const token = generateAccessToken({
                     niu
                 }, process.env.SECRET_TOKEN);

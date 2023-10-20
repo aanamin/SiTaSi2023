@@ -49,4 +49,16 @@ controller.mahasiswaBimbingan = async (req,res) => {
     }
 }
 
+// progress mahasiswa bimbingan
+controller.progressMabing = async (req,res) =>{
+    try {
+        
+    } catch (error) {
+        console.error('Kesalahan:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan dalam mengambil data progress mahasiswa bimbingan.'
+        });
+    }
+}
+
 module.exports = controller
