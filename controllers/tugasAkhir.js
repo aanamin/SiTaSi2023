@@ -42,6 +42,54 @@ controller.tampilAllProgress = async (req, res) => {
 
 };
 
+// tampilin page pilih dosbing
+controller.tampilPilihDosbing = async (req, res) => {
+    try {
+        // mengambil data dosen
+      const dosenData = await models.dosen.findAll();
+    // menggunakan data dosen tersebut dengan mengirim dalam bentuk JSON
+      res.status(200).json( {
+        dosenData: dosenData,
+      });
+    } catch (error) {
+      console.error('Kesalahan:', error);
+      res.status(500).json({
+        message: 'Terjadi kesalahan dalam menampilkan halaman form.'
+      });
+    }
+  };
+
+//controller untuk nyimpan hasil pemilihan dosbing
+controller.saveDosbing = async(req,res)=>{
+    try {
+        const nimMahasiswa = req.session.user.id
+        const{ idDosbing, judul, detailIde} = req.body
+        if(!idDosbing || !judul || !detailIde){
+            return res.status(400).json({
+                message: 'Harap isi semua Field'
+            })
+        }
+
+        const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+        const dosbing = await models.tugasAkhir.create({
+            nim: nimMahasiswa,
+            id_dosbing: idDosbing,
+            judul: judul,
+            detail_ide : detailIde,
+            tanggal_judul: currentDate,
+            status_judul: 'pengajuan'
+        })
+        res.status(200).json({
+            dosbing: dosbing
+        })
+    } catch (error) {
+        console.error('Terdapat Error Pada: ', error)
+        res.status(500).json({
+            message: 'terjadi kesalahan dalam menyimpan dosbing'
+        })
+    }
+}
+
 //upload dokumen 
 //upload proposal
 controller.uploadproposal = async (req, res) => {

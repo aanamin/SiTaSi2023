@@ -14,13 +14,15 @@ const {
     Op
 } = require("sequelize");
 
+
 // menampilkan semua mahasiswa bimbingan
 controller.mahasiswaBimbingan = async (req,res) => {
     try {
         const nip = req.session.user.id
         const ta = await models.tugasAkhir.findAll({
             where: {
-                id_dosbing: nip
+                id_dosbing: nip,
+                status_judul: 'accept'
             }
         });
         
