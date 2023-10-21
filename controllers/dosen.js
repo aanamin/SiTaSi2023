@@ -52,7 +52,53 @@ controller.mahasiswaBimbingan = async (req,res) => {
 // progress mahasiswa bimbingan
 controller.progressMabing = async (req,res) =>{
     try {
-        
+        const nimMahasiswa = req.params.nimMahasiswa
+
+        const mahasiswa = await models.mahasiswa.findOne({
+            where: {
+                nim: nimMahasiswa
+            }
+        })
+        const ta = await models.tugasAkhir.findOne({
+            where:{
+                nim:nimMahasiswa
+            }
+        })
+
+        res.status(200).json({
+            progress: ta,
+            mahasiswa: mahasiswa
+        })
+    } catch (error) {
+        console.error('Kesalahan:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan dalam mengambil data progress mahasiswa bimbingan.'
+        });
+    }
+}
+
+// detail proposal mahasiswa bimbingan
+controller.detailProposalMabing = async (req,res) =>{
+    try {
+        const nimMahasiswa = req.params.nimMahasiswa
+        const progress = req.params.progress
+        const ta = await models.tugasAkhir.findOne({
+            where:{
+                nim:nimMahasiswa
+            }
+        })
+        if (ta) {
+            const filePath= path.join(__dirname, '../uploads', ta[progress])
+            res.sendFile(filePath)
+            
+        } else {
+            res.status(404).json({
+                message: 'tidak ditemukan'
+            })
+        }
+        // res.status(200).json({
+        //     file: ta.proposal
+        // })
     } catch (error) {
         console.error('Kesalahan:', error);
         res.status(500).json({

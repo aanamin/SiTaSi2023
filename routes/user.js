@@ -28,4 +28,6 @@ server.get('/login', controller.user.tampilLogin)
 
 // route untuk dosen
 server.get('/mahasiswaBimbingan', verifyToken,authorization('dosen'), controller.dosen.mahasiswaBimbingan)
+server.get('/progress/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.progressMabing)
+server.get('/progress/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.detailProposalMabing)
 module.exports = server
