@@ -8,6 +8,13 @@ const authorization = require('../middleware/authorization.js')
 
 server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.uploadproposal)
 
+// route untk awal
+server.get('/landing',  controller.user.landing)
+server.post('/signup', controller.user.register)
+server.get('/signup', controller.user.tampilRegister)
+server.post('/login', controller.user.login)
+server.get('/login', controller.user.tampilLogin)
+
 //route untuk ta 
 server.post('/editProposal', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilEditProposal)
 server.post('/editproposal', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.editProposal)
@@ -29,14 +36,6 @@ server.get('/upbab5',verifyToken, authorization('mahasiswa'), controller.tugasAk
 server.post('/upbab5',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab5)
 server.get('/upbab6',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatbab6)
 server.post('/upbab6',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab6)
-
-// route untk awal
-server.get('/landing',  controller.user.landing)
-server.post('/signup', controller.user.register)
-server.get('/signup', controller.user.tampilRegister)
-server.post('/login', controller.user.login)
-server.get('/login', controller.user.tampilLogin)
-
 
 // route untuk dosen
 server.get('/mahasiswaBimbingan', verifyToken,authorization('dosen'), controller.dosen.mahasiswaBimbingan)
