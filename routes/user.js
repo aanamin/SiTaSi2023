@@ -17,6 +17,18 @@ server.get('/detailDocuments/:document_id', verifyToken, authorization('mahasisw
 server.get('/progress',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilAllProgress)
 server.get('/upproposal',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatProposal)
 server.post('/upproposal',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadproposal)
+server.get('/upbab1',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatBab1)
+server.post('/upbab1',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab1)
+server.get('/upbab2',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatBab2)
+server.post('/upbab2',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab2)
+server.get('/upbab3',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatBab3)
+server.post('/upbab3',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab3)
+server.get('/upbab4',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatBab4)
+server.post('/upbab4',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab4)
+server.get('/upbab5',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatbab5)
+server.post('/upbab5',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab5)
+server.get('/upbab6',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatbab6)
+server.post('/upbab6',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadbab6)
 
 // route untk awal
 server.get('/landing',  controller.user.landing)
