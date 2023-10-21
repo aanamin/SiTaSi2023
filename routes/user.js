@@ -40,5 +40,7 @@ server.post('/upbab6',verifyToken,authorization('mahasiswa'), controller.tugasAk
 // route untuk dosen
 server.get('/mahasiswaBimbingan', verifyToken,authorization('dosen'), controller.dosen.mahasiswaBimbingan)
 server.get('/progress/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.progressMabing)
-server.get('/progress/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.detailProposalMabing)
+server.get('/progress/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.detailProgressMabing)
+server.post('/acc/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.accProgressMabing)
+server.post('/reject/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.rejectProgressMabing)
 module.exports = server
