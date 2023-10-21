@@ -46,7 +46,13 @@ controller.tampilAllProgress = async (req, res) => {
 controller.tampilPilihDosbing = async (req, res) => {
     try {
         // mengambil data dosen
-      const dosenData = await models.dosen.findAll();
+      const dosenData = await models.dosen.findAll({
+        where:{
+            kuota_dosbing: {
+                [Op.gt]:0
+            }
+        }
+      });
     // menggunakan data dosen tersebut dengan mengirim dalam bentuk JSON
       res.status(200).json( {
         dosenData: dosenData,
