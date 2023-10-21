@@ -46,4 +46,8 @@ server.get('/progress/:nimMahasiswa', verifyToken,authorization('dosen'), contro
 server.get('/progress/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.detailProgressMabing)
 server.post('/acc/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.accProgressMabing)
 server.post('/reject/:nimMahasiswa/:progress', verifyToken,authorization('dosen'), controller.dosen.rejectProgressMabing)
+server.get('/requestdosbing', verifyToken,authorization('dosen'), controller.dosen.tampilRequestDosbing)
+server.get('/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.tampilDetailRequest)
+server.post('/reject/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.rejectRequestDosbing)
+server.post('/accept/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.accRequestDosbing)
 module.exports = server
