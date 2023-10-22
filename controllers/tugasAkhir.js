@@ -786,7 +786,7 @@ controller.deletebab6 = async (req, res) => {
 controller.detailDokumen = async (req, res) => {
     const {
         jenisFile
-    } = req.params.jenisFile;
+    } = req.params;
     const nim = req.session.user.id
     const tugasAkhir = await models.tugasAkhir.findOne({
         where:{
