@@ -44,4 +44,7 @@ server.get('/requestdosbing', verifyToken,authorization('dosen'), controller.dos
 server.get('/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.tampilDetailRequest)
 server.post('/reject/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.rejectRequestDosbing)
 server.post('/accept/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.accRequestDosbing)
+
+// route untuk admin
+server.get('/listdosen', verifyToken, authorization('admin'), controller.admin.tampilListDosen)
 module.exports = server

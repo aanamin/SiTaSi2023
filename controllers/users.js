@@ -147,32 +147,6 @@ controllers.changepw = async (req, res) => {
 
 }
 
-controllers.profil = async (req, res) => {
-    // res.render('profile')
-    try {
-
-        const userId = req.user.id
-        const userProfile = await user.findOne({
-            where: {
-                id: userId
-            }
-        })
-        if (!userProfile) {
-            return res.status(404).json({
-                message: 'Profil pengguna tidak ditemukan.'
-            });
-        }
-
-        res.render('profile', {
-            user: userProfile
-        });
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-
 controllers.register = async (req, res) => {
     try {
         const {
@@ -352,5 +326,145 @@ controllers.login = async (req, res) => {
     }
 }
 
+controllers.profil = async(req,res)=>{
+    try {
+        if(req.session.type ==='dosen'){
+            const nip = req.session.id
+            const profil = await models.dosen.findOne({
+                where:{
+                    nip: nip
+                }
+            })
+            res.status(200).json({
+                profil: profil
+            })
+        }else if(req.session.type === 'admin'){
+            const niu = req.session.id
+            const profil = await models.dosen.findOne({
+                where:{
+                    niu: niu
+                }
+            })
+            res.status(200).json({
+                profil: profil
+            })
+        }else if(req.session.type ==='mahasiswa'){
+            const nim = req.session.id
+            const profil = await models.mahasiswa.findOne({
+                where: {
+                    nim:nim
+                }
+            })
+            res.status(200).json({
+                profil: profil
+            })
+        }
+    } catch (error) {
+        console.log(error)
+    }
+}
 
+// editprofil
+controllers.editprofildosen = async(req,res)=>{
+    try {
+        const { nip, jenisKelamin, password, nama} = req.body
+        const nipDosen = req.session.user.id
+        const dosenlama = await models.dosen.findOne({
+            where: {
+                nip: nipDosen
+            }
+        })
+        if(!dosenlama){
+            res.status(404).json({
+                message: 'maaf tidak ditemukan profilnya'
+            })
+        }
+
+        const profilBaru = await models.dosen.update({
+            nip: nip,
+            jenis_kelamin: jenisKelamin,
+            nama_dosen: nama,
+            password: password
+        }, {
+            where:{
+                nip:nipDosen
+            }
+        })
+        res.status(200).json({
+            message: 'profil telah diperbarui'
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// edit profil mahasiswa
+controllers.editprofilmahasiswa = async(req,res)=>{
+    try {
+        const { nim, jenisKelamin, password, nama} = req.body
+        const nimMahasiswa = req.session.user.id
+        const mahasiswalama = await models.mahasiswa.findOne({
+            where: {
+                nim: nimMahasiswa
+            }
+        })
+        if(!mahasiswalama){
+            res.status(404).json({
+                message: 'maaf tidak ditemukan profilnya'
+            })
+        }
+
+        const profilBaru = await models.mahasiswa.update({
+            nim: nim,
+            jenis_kelamin: jenisKelamin,
+            nama_mahasiswa: nama,
+            password: password
+        }, {
+            where:{
+                nim:nimMahasiswa
+            }
+        })
+        res.status(200).json({
+            profil: profilBaru,
+            message: 'profil telah diperbarui'
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+// edit profil admin
+controllers.editprofiladmin = async(req,res)=>{
+    try {
+        const { niu, jenisKelamin, password, nama} = req.body
+        const niuAdmin = req.session.user.id
+        const adminlama = await models.admin.findOne({
+            where: {
+                niu: niuAdmin
+            }
+        })
+        if(!adminlama){
+            res.status(404).json({
+                message: 'maaf tidak ditemukan profilnya'
+            })
+        }
+
+        const profilBaru = await models.admin.update({
+            nim: niu,
+            jenis_kelamin: jenisKelamin,
+            nama_admin: nama,
+            password: password
+        }, {
+            where:{
+                nim:niuAdmin
+            }
+        })
+        res.status(200).json({
+            profil: profilBaru,
+            message: 'profil telah diperbarui'
+        })
+    } catch (error) {
+        console.log(error)
+    }
+}
 module.exports = controllers
