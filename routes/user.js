@@ -32,6 +32,8 @@ server.post('/upprogress/:jenisFile',verifyToken,authorization('mahasiswa'), con
 server.get('/upprogress/:jenisFile',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatProgress)
 server.get('/pilihdosbing',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
 server.post('/pilihdosbing',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.saveDosbing)
+server.post('/editprofil',verifyToken,authorization('mahasiswa'), controller.user.editprofilmahasiswa)
+
 
 
 // route untuk dosen
@@ -44,7 +46,9 @@ server.get('/requestdosbing', verifyToken,authorization('dosen'), controller.dos
 server.get('/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.tampilDetailRequest)
 server.post('/reject/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.rejectRequestDosbing)
 server.post('/accept/requestdosbing/:nimMahasiswa', verifyToken,authorization('dosen'), controller.dosen.accRequestDosbing)
+server.post('/editprofil', verifyToken,authorization('dosen'), controller.user.editprofildosen)
 
 // route untuk admin
 server.get('/listdosen', verifyToken, authorization('admin'), controller.admin.tampilListDosen)
+server.post('/editprofil', verifyToken, authorization('admin'), controller.user.editprofiladmin)
 module.exports = server
