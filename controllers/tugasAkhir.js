@@ -13,6 +13,7 @@ const fs = require('fs');
 const {
     Op
 } = require("sequelize");
+const { tugasAkhir } = require('.');
 
 
 //tampil page progress TA page Mahasiswa
@@ -268,34 +269,91 @@ controller.tampilBuatProgress = async (req, res) => {
 }
 
 // updateProposal
-controller.tampilEditProposal = async (req, res) => {
+controller.tampilEditProgress = async (req, res) => {
 
     try {
         const nim = req.session.user.id
 
-        const proposal = await models.tugasAkhir.findOne({
+        const jenisFile= req.params.jenisFile
+        const ta = await models.tugasAkhir.findOne({
             where: {
                 nim: nim
             }
         })
-        if (!proposal) {
+        if (!ta) {
             return res.status(404).json({
                 success: false,
                 message: 'Tidak ada dokumen dengan id tersebut'
             })
         }
 
-        // jika proposalnya sudah di acc maka tidak bisa diubah
-        if (proposal) {
-            const status = proposal.status_proposal;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
+        if(jenisFile ==='bab1'){
+            // jika proposalnya sudah di acc maka tidak bisa diubah
+            if (ta) {
+                const status = ta.status_bab1;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='bab2'){
+            if (ta) {
+                const status = ta.status_bab2;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='bab3'){
+            if (ta) {
+                const status = ta.status_bab3;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='proposal'){
+            if (proposal) {
+                const status = ta.status_proposal;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='bab4'){
+            if (ta) {
+                const status = ta.status_bab4;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='bab5'){
+            if (ta) {
+                const status = ta.status_bab5;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
+            }
+        }else if(jenisFile ==='bab6'){
+            if (ta) {
+                const status = ta.status_bab6;
+                if (status === 'accept') {
+                    return res.status(400).json({
+                        message: 'maaf, dokumen ini sudah di acc'
+                    })
+                }
             }
         }
-        res.render('editUpresources', {
-            proposal: proposal
+        res.status(2000).json( {
+            ta: ta
         })
     } catch (error) {
         console.log(error)
@@ -305,16 +363,16 @@ controller.tampilEditProposal = async (req, res) => {
     }
 }
 
-controller.editProposal = async (req, res) => {
+controller.editprogress = async (req, res) => {
     try {
         const nim = req.session.user.id
-        const proposal = req.params.document_id
+        const jenisFile = req.params.jenisFile
         const tugasAkhir = await models.tugasAkhir.findOne({
             where: {
-                proposal: proposal
+                nim:nim
             }
         })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.proposal);
+        const filePath = path.join(__dirname, '..', 'uploads', `${jenisFile}${nim}.${fileExtension}`);
 
         fs.unlink(filePath, (err) => {
             if (err) {
@@ -326,10 +384,9 @@ controller.editProposal = async (req, res) => {
                 message: 'Tidak ada file yang diunggah'
             });
         }
-        const nama = 'proposal'
         const file = req.files.file;
         const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
+        const fileName = `${jenisFile}${nim}.${fileExtension}`;
 
         file.mv(`uploads/${fileName}`, async (err) => {
             if (err) {
@@ -340,107 +397,87 @@ controller.editProposal = async (req, res) => {
             }
 
             const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                proposal: fileName,
-                tanggal_proposal: currentDate,
-                status_proposal: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-
-// updateBAB1
-controller.tampilEditBab1 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab1 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab1) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab1nya sudah di acc maka tidak bisa diubah
-        if (bab1) {
-            const status = bab1.status_bab1;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
+            if(jenisFile === 'proposal'){
+                await models.tugasAkhir.update({
+    
+                    proposal: fileName,
+                    tanggal_proposal: currentDate,
+                    status_proposal: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile ==='bab1'){
+                await models.tugasAkhir.update({
+    
+                    bab1: fileName,
+                    tanggal_bab1: currentDate,
+                    status_bab1: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile==='bab2'){
+                await models.tugasAkhir.update({
+    
+                    bab2: fileName,
+                    tanggal_bab2: currentDate,
+                    status_bab2: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile ==='bab3'){
+                await models.tugasAkhir.update({
+    
+                    bab3: fileName,
+                    tanggal_bab3: currentDate,
+                    status_bab3: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile ==='bab4'){
+                await models.tugasAkhir.update({
+    
+                    bab4: fileName,
+                    tanggal_bab4: currentDate,
+                    status_bab4: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile==='bab5'){
+                await models.tugasAkhir.update({
+    
+                    bab5: fileName,
+                    tanggal_bab5: currentDate,
+                    status_bab5: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
+                })
+            }else if(jenisFile==='bab6'){
+                await models.tugasAkhir.update({
+    
+                    bab6: fileName,
+                    tanggal_bab6: currentDate,
+                    status_bab6: 'pengajuan'
+                }, {
+                    where: {
+                        nim: nim,
+                    }
                 })
             }
-        }
-        res.render('editUpresources', {
-            bab1: bab1
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab1 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab1);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab1'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-                bab1: fileName,
-                tanggal_bab1: currentDate,
-                status_bab1: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
+            res.statuss(200).json({
+                tugasAkhir: tugasAkhir
             })
-            res.redirect('resources')
         });
 
     } catch (error) {
@@ -448,455 +485,6 @@ controller.editbab1 = async (req, res) => {
     }
 }
 
-// updateBAB2
-controller.tampilEditbab2 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab2 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab2) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab2nya sudah di acc maka tidak bisa diubah
-        if (bab2) {
-            const status = bab2.status_bab2;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
-            }
-        }
-        res.render('editUpresources', {
-            bab2: bab2
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab2 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab2);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab2'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                bab2: fileName,
-                tanggal_bab2: currentDate,
-                status_bab2: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-// updatebab3
-controller.tampilEditbab3 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab3 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab3) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab3nya sudah di acc maka tidak bisa diubah
-        if (bab3) {
-            const status = bab3.status_bab3;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
-            }
-        }
-        res.render('editUpresources', {
-            bab3: bab3
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab3 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab3);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab3'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                bab3: fileName,
-                tanggal_bab3: currentDate,
-                status_bab3: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-// updatebab4
-controller.tampilEditbab4 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab4 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab4) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab4nya sudah di acc maka tidak bisa diubah
-        if (bab4) {
-            const status = bab4.status_bab4;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
-            }
-        }
-        res.render('editUpresources', {
-            bab4: bab4
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab4 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab4);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab4'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                bab4: fileName,
-                tanggal_bab4: currentDate,
-                status_bab4: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-// updatebab5
-controller.tampilEditbab5 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab5 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab5) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab5nya sudah di acc maka tidak bisa diubah
-        if (bab5) {
-            const status = bab5.status_bab5;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
-            }
-        }
-        res.render('editUpresources', {
-            bab5: bab5
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab5 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab5);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab5'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                bab5: fileName,
-                tanggal_bab5: currentDate,
-                status_bab5: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
-
-// updatebab6
-controller.tampilEditbab6 = async (req, res) => {
-
-    try {
-        const nim = req.session.user.id
-
-        const bab6 = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!bab6) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        // jika bab6nya sudah di acc maka tidak bisa diubah
-        if (bab6) {
-            const status = bab6.status_bab6;
-            if (status === 'accept') {
-                return res.status(400).json({
-                    message: 'maaf, dokumen ini sudah di acc'
-                })
-            }
-        }
-        res.render('editUpresources', {
-            bab6: bab6
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editbab6 = async (req, res) => {
-    try {
-        const nim = req.session.user.id
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', tugasAkhir.bab6);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const nama = 'bab6'
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${nama}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            await models.tugasAkhir.update({
-
-                bab6: fileName,
-                tanggal_bab6: currentDate,
-                status_bab6: 'pengajuan'
-            }, {
-                where: {
-                    nim: nim,
-                }
-            })
-            res.redirect('resources')
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 // deletedokumen
 controller.deleteProposal = async (req, res) => {
@@ -904,32 +492,34 @@ controller.deleteProposal = async (req, res) => {
     try {
         const nim = req.session.user.id;
 
-        const proposal = await models.tugasAkhir.findOne({
+        const ta = await models.tugasAkhir.findOne({
             where: {
                 nim: nim
             }
         });
-        if (!proposal) {
+        if (!ta) {
             return res.status(404).json({
                 pesan: 'Dokumen tidak ditemukan.'
             });
         }
 
-        const filePath = path.join(__dirname, '..', 'uploads', proposal.proposal);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        await models.tugasAkhir.update({
-            proposal: null,
-            status_proposal: null
-        }, {
-            where: {
-                nim: nim
-            }
-        })
+        const filePath = path.join(__dirname, '..', 'uploads', ta.proposal);
+        const status = ta.status_proposal
+        if(status !== 'accept'){
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                proposal: null,
+                status_proposal: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
 
         return res.json({
             pesan: "berhasil menghapus data"
@@ -938,12 +528,272 @@ controller.deleteProposal = async (req, res) => {
         console.log(err)
     }
 }
+controller.deleteBab1 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab1);
+        const status = ta.status_bab1
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab1: null,
+                status_bab1: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+controller.deleteBab2 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab2);
+        const status = ta.status_bab2
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab2: null,
+                status_bab2: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+controller.deletebab3 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab3);
+        const status = ta.status_bab3
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab3: null,
+                status_bab3: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+controller.deletebab4 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab4);
+        const status = ta.status_bab4
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab4: null,
+                status_bab4: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+controller.deletebab5 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab5);
+        const status = ta.status_bab5
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab5: null,
+                status_bab5: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+controller.deletebab6 = async (req, res) => {
+
+    try {
+        const nim = req.session.user.id;
+
+        const ta = await models.tugasAkhir.findOne({
+            where: {
+                nim: nim
+            }
+        });
+        if (!ta) {
+            return res.status(404).json({
+                pesan: 'Dokumen tidak ditemukan.'
+            });
+        }
+
+        const filePath = path.join(__dirname, '..', 'uploads', ta.bab6);
+        const status = ta.status_bab6
+        if(status !== 'accept'){
+            
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            await models.tugasAkhir.update({
+                bab6: null,
+                status_bab6: null
+            }, {
+                where: {
+                    nim: nim
+                }
+            })
+        }
+
+        return res.json({
+            pesan: "berhasil menghapus data"
+        })
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 // view dokumen
 controller.detailDokumen = async (req, res) => {
     const {
-        filename
-    } = req.params;
-    const filePath = path.join(__dirname, '../uploads', filename);
+        jenisFile
+    } = req.params.jenisFile;
+    const nim = req.session.user.id
+    const tugasAkhir = await models.tugasAkhir.findOne({
+        where:{
+            nim:nim
+        }
+    })
+    const filePath = path.join(__dirname, '../uploads', tugasAkhir[jenisFile] );
 
     res.sendFile(filePath);
 }
