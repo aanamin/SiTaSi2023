@@ -50,5 +50,6 @@ server.post('/editprofil', verifyToken,authorization('dosen'), controller.user.e
 
 // route untuk admin
 server.get('/listdosen', verifyToken, authorization('admin'), controller.admin.tampilListDosen)
+server.post('/tambahakundosen', verifyToken, authorization('admin'), controller.admin.tambahAkunDosen)
 server.post('/editprofil', verifyToken, authorization('admin'), controller.user.editprofiladmin)
 module.exports = server
