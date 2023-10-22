@@ -799,4 +799,13 @@ controller.detailDokumen = async (req, res) => {
 }
 
 
+controller.tampilSemhas = async(req,res)=>{
+    try {
+        
+    } catch (error) {
+        
+    }
+}
+
+
 module.exports = controller

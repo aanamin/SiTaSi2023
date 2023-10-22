@@ -15,10 +15,21 @@ const {
 } = require("sequelize");
 
 controller.tampilListDosen = async (req, res) => {
-    const dosen = await models.dosen.findAll()
-    res.status(200).json({
-        dosen: dosen
-    })
+    try {
+        const dosen = await models.dosen.findAll()
+        if(!dosen){
+            res.status(404).json({
+                message: 'Tidak terdapat akun dosen'
+            })
+        }
+        res.status(200).json({
+            dosen: dosen
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'terdapat masalah'
+        })
+    }
 }
 
 controller.tambahAkunDosen = async (req, res) => {
