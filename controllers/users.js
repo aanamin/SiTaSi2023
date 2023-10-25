@@ -14,25 +14,6 @@ process.env.SECRET_TOKEN;
 
 const controllers = {}
 
-controllers.tampilChangepw = async (req, res) => {
-    res.render('changepw')
-}
-controllers.tampilLogin = async (req, res) => {
-    res.render('login')
-}
-controllers.tampilRegister = async (req, res) => {
-    res.render('signup')
-}
-
-controllers.mainpage = async (req, res) => {
-
-    res.render('mainpage')
-}
-
-controllers.landing = async (req, res) => {
-    res.render('landingpage')
-}
-
 controllers.logout = async (req, res) => {
     try {
         const userId = req.user.id
@@ -62,90 +43,9 @@ controllers.logout = async (req, res) => {
 
 }
 
-controllers.upsignature = async (req, res) => {
-    try {
-        const userId = req.user.id;
-        const user = await models.user.findOne({
-            where: {
-                id: userId
-            }
-        });
 
 
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
 
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${userId}.${fileExtension}`;
-
-        // Simpan file ke direktori yang diinginkan
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            // Simpan informasi file ke database
-            const uploadedFile = await models.user.update({
-                sign_img: fileName
-            }, {
-                where: {
-                    id: userId
-                }
-            });
-
-            return res.status(200).json({
-                message: 'File berhasil diunggah',
-                file: uploadedFile,
-                success: true
-            });
-        });
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({
-            message: 'Terjadi kesalahan saat mengunggah file'
-        });
-    }
-};
-
-controllers.changepw = async (req, res) => {
-    try {
-        const {
-            password,
-            newpassword
-        } = req.body
-        const userId = req.user.id
-        const user = await models.user.findOne({
-            where: {
-                id: userId
-            }
-        })
-        if (password != user.password) {
-            return res.status(403).json({
-                message: 'masukkan password yang benar'
-            })
-        }
-        await models.user.update({
-            password: newpassword,
-        }, {
-            where: {
-                id: userId
-            }
-        })
-        return res.status(201).json({
-            msg: "Password anda telah diperbarui",
-        })
-    } catch (error) {
-        console.log(error)
-    }
-
-}
 
 controllers.register = async (req, res) => {
     try {

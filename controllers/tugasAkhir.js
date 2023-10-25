@@ -13,7 +13,9 @@ const fs = require('fs');
 const {
     Op
 } = require("sequelize");
-const { tugasAkhir } = require('.');
+const {
+    tugasAkhir
+} = require('.');
 
 
 //tampil page progress TA page Mahasiswa
@@ -234,27 +236,27 @@ controller.tampilBuatProgress = async (req, res) => {
                 nim: nim
             }
         })
-       
-        if(jenisFile ==='proposal'||jenisFile==='bab1'||jenisFile==='bab2'||jenisFile==='bab3'){
+
+        if (jenisFile === 'proposal' || jenisFile === 'bab1' || jenisFile === 'bab2' || jenisFile === 'bab3') {
             if (tugasAkhir.status !== 'judul') {
                 return res.status(403).json({
                     message: 'Submit judul terlebih dahulu'
                 });
             }
-        }else if(jenisFile === 'bab4'){
+        } else if (jenisFile === 'bab4') {
             if (tugasAkhir.status !== 'proposal') {
                 return res.status(403).json({
                     message: 'Submit proposal terlebih dahulu atau tunggu proposal di acc'
                 });
             }
-        }else if(jenisFile ==='bab5'){
-            if(tugasAkhir.status !=='bab4'){
+        } else if (jenisFile === 'bab5') {
+            if (tugasAkhir.status !== 'bab4') {
                 return res.status(403).json({
                     message: 'Submit bab4 terlebih dahulu'
                 })
             }
-        }else if(jenisFile ==='bab6'){
-            if(tugasAkhir.status !=='bab4'){
+        } else if (jenisFile === 'bab6') {
+            if (tugasAkhir.status !== 'bab4') {
                 return res.status(403).json({
                     message: 'Submit bab4 terlebih dahulu'
                 })
@@ -274,7 +276,7 @@ controller.tampilEditProgress = async (req, res) => {
     try {
         const nim = req.session.user.id
 
-        const jenisFile= req.params.jenisFile
+        const jenisFile = req.params.jenisFile
         const ta = await models.tugasAkhir.findOne({
             where: {
                 nim: nim
@@ -287,7 +289,7 @@ controller.tampilEditProgress = async (req, res) => {
             })
         }
 
-        if(jenisFile ==='bab1'){
+        if (jenisFile === 'bab1') {
             // jika proposalnya sudah di acc maka tidak bisa diubah
             if (ta) {
                 const status = ta.status_bab1;
@@ -297,7 +299,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='bab2'){
+        } else if (jenisFile === 'bab2') {
             if (ta) {
                 const status = ta.status_bab2;
                 if (status === 'accept') {
@@ -306,7 +308,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='bab3'){
+        } else if (jenisFile === 'bab3') {
             if (ta) {
                 const status = ta.status_bab3;
                 if (status === 'accept') {
@@ -315,7 +317,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='proposal'){
+        } else if (jenisFile === 'proposal') {
             if (proposal) {
                 const status = ta.status_proposal;
                 if (status === 'accept') {
@@ -324,7 +326,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='bab4'){
+        } else if (jenisFile === 'bab4') {
             if (ta) {
                 const status = ta.status_bab4;
                 if (status === 'accept') {
@@ -333,7 +335,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='bab5'){
+        } else if (jenisFile === 'bab5') {
             if (ta) {
                 const status = ta.status_bab5;
                 if (status === 'accept') {
@@ -342,7 +344,7 @@ controller.tampilEditProgress = async (req, res) => {
                     })
                 }
             }
-        }else if(jenisFile ==='bab6'){
+        } else if (jenisFile === 'bab6') {
             if (ta) {
                 const status = ta.status_bab6;
                 if (status === 'accept') {
@@ -352,7 +354,7 @@ controller.tampilEditProgress = async (req, res) => {
                 }
             }
         }
-        res.status(2000).json( {
+        res.status(2000).json({
             ta: ta
         })
     } catch (error) {
@@ -369,7 +371,7 @@ controller.editprogress = async (req, res) => {
         const jenisFile = req.params.jenisFile
         const tugasAkhir = await models.tugasAkhir.findOne({
             where: {
-                nim:nim
+                nim: nim
             }
         })
         const filePath = path.join(__dirname, '..', 'uploads', `${jenisFile}${nim}.${fileExtension}`);
@@ -397,9 +399,9 @@ controller.editprogress = async (req, res) => {
             }
 
             const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            if(jenisFile === 'proposal'){
+            if (jenisFile === 'proposal') {
                 await models.tugasAkhir.update({
-    
+
                     proposal: fileName,
                     tanggal_proposal: currentDate,
                     status_proposal: 'pengajuan'
@@ -408,9 +410,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile ==='bab1'){
+            } else if (jenisFile === 'bab1') {
                 await models.tugasAkhir.update({
-    
+
                     bab1: fileName,
                     tanggal_bab1: currentDate,
                     status_bab1: 'pengajuan'
@@ -419,9 +421,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile==='bab2'){
+            } else if (jenisFile === 'bab2') {
                 await models.tugasAkhir.update({
-    
+
                     bab2: fileName,
                     tanggal_bab2: currentDate,
                     status_bab2: 'pengajuan'
@@ -430,9 +432,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile ==='bab3'){
+            } else if (jenisFile === 'bab3') {
                 await models.tugasAkhir.update({
-    
+
                     bab3: fileName,
                     tanggal_bab3: currentDate,
                     status_bab3: 'pengajuan'
@@ -441,9 +443,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile ==='bab4'){
+            } else if (jenisFile === 'bab4') {
                 await models.tugasAkhir.update({
-    
+
                     bab4: fileName,
                     tanggal_bab4: currentDate,
                     status_bab4: 'pengajuan'
@@ -452,9 +454,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile==='bab5'){
+            } else if (jenisFile === 'bab5') {
                 await models.tugasAkhir.update({
-    
+
                     bab5: fileName,
                     tanggal_bab5: currentDate,
                     status_bab5: 'pengajuan'
@@ -463,9 +465,9 @@ controller.editprogress = async (req, res) => {
                         nim: nim,
                     }
                 })
-            }else if(jenisFile==='bab6'){
+            } else if (jenisFile === 'bab6') {
                 await models.tugasAkhir.update({
-    
+
                     bab6: fileName,
                     tanggal_bab6: currentDate,
                     status_bab6: 'pengajuan'
@@ -505,7 +507,7 @@ controller.deleteProposal = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.proposal);
         const status = ta.status_proposal
-        if(status !== 'accept'){
+        if (status !== 'accept') {
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -546,8 +548,8 @@ controller.deleteBab1 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab1);
         const status = ta.status_bab1
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -589,8 +591,8 @@ controller.deleteBab2 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab2);
         const status = ta.status_bab2
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -631,8 +633,8 @@ controller.deletebab3 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab3);
         const status = ta.status_bab3
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -673,8 +675,8 @@ controller.deletebab4 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab4);
         const status = ta.status_bab4
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -715,8 +717,8 @@ controller.deletebab5 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab5);
         const status = ta.status_bab5
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -757,8 +759,8 @@ controller.deletebab6 = async (req, res) => {
 
         const filePath = path.join(__dirname, '..', 'uploads', ta.bab6);
         const status = ta.status_bab6
-        if(status !== 'accept'){
-            
+        if (status !== 'accept') {
+
             fs.unlink(filePath, (err) => {
                 if (err) {
                     console.error('Gagal menghapus file:', err);
@@ -789,23 +791,143 @@ controller.detailDokumen = async (req, res) => {
     } = req.params;
     const nim = req.session.user.id
     const tugasAkhir = await models.tugasAkhir.findOne({
-        where:{
-            nim:nim
+        where: {
+            nim: nim
         }
     })
-    const filePath = path.join(__dirname, '../uploads', tugasAkhir[jenisFile] );
+    const filePath = path.join(__dirname, '../uploads', tugasAkhir[jenisFile]);
 
     res.sendFile(filePath);
 }
 
 
-controller.tampilSemhas = async(req,res)=>{
+controller.tampilSemhas = async (req, res) => {
     try {
-        
+        const nimMahasiswa = req.session.user.id
+        const semhas = await models.tugasAkhir.findOne({
+            where: {
+                nim: nimMahasiswa
+            }
+        })
+        if (!semhas) {
+            res.status(404).json({
+                message: 'maaf, silahkan upload progress terlebih dahulu'
+            })
+        }
+        res.status(200).json({
+            semhas: semhas
+        })
     } catch (error) {
-        
+        res.status(500).json({
+            message: 'terjadi masalah'
+        })
     }
 }
 
+// untuk menampilkan pengajuan semhas
+controller.tampilPengajuanSemhas = async (req, res) => {
+    try {
+        const nimMahasiswa = req.session.user.id
+        const semhas = await models.tugasAkhir.findOne({
+            where: {
+                nim: nimMahasiswa
+            }
+        })
+        if (!semhas) {
+            res.status(404).json({
+                message: 'maaf, silahkan upload progress terlebih dahulu'
+            })
+        }
+        if (semhas.status_bab6 !== 'accept') {
+            res.status(401).json({
+                message: 'Maaf silahkan selesaikan TA anda terlebih dahulu'
+            })
+        }
+        res.status(200).json({
+            semhas: semhas
+        })
+    } catch (error) {
+        res.status(500).json({
+            message: 'terjadi masalah'
+        })
+    }
+}
 
+// menyimpan hasil pengajuan semhas
+controller.pengajuanSemhas = async (req, res) => {
+    try {
+        const nim = req.session.user.id
+
+        if (!req.files.formulir || Object.keys(req.files.formulir).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+        if (!req.files.fullta || Object.keys(req.files.fullta).length === 0) {
+            return res.status(400).json({
+                message: 'Tidak ada file yang diunggah'
+            });
+        }
+
+        const formulir = req.files.formulir;
+        const fileExtension = formulir.name.split('.').pop();
+        const fileName = `formulirSemhas${nim}.${fileExtension}`;
+
+        if (fs.existsSync(`uploads/${fileName}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${fileName}`);
+        }
+
+        const fullta = req.files.fullta
+        const formatFile = fullta.name.split('.').pop();
+        const namaFile = `fullta${nim}.${formatFile}`;
+
+        if (fs.existsSync(`uploads/${namaFile}`)) {
+            // Jika ada, hapus file lama
+            fs.unlinkSync(`uploads/${namaFile}`);
+        }
+
+        formulir.mv(`uploads/${fileName}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+
+        });
+
+        fullta.mv(`uploads/${namaFile}`, async (err) => {
+            if (err) {
+                console.log(err)
+                return res.status(500).json({
+                    message: 'Terjadi kesalahan saat mengunggah file'
+                });
+            }
+
+        });
+        await models.tugasAkhir.update({
+            formulir_semhas: fileName,
+            full: namaFile
+        }, {
+            where: {
+                nim: nim
+            }
+        })
+        res.status(200).json({
+            message: `${fileName} & ${namaFile} berhasil diupload`
+        })
+    } catch (error) {
+        console.log(error)
+        res.status.json({
+            message: error
+        })
+    }
+}
+
+//tampil pengajuan sidang
+controller.tampilPengajuanSidang = async(req,res)=>{
+    
+}
 module.exports = controller

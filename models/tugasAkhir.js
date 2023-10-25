@@ -119,6 +119,10 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.STRING,
         allowNull   : true
     },
+    formulir_semhas :{
+        type        : DataTypes.STRING,
+        allowNull   : true
+    },
     full :{
         type        : DataTypes.STRING,
         allowNull   : true
