@@ -9,11 +9,8 @@ const authorization = require('../middleware/authorization.js')
 server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.uploadProgress)
 
 // route untk awal
-server.get('/landing',  controller.user.landing)
 server.post('/signup', controller.user.register)
-server.get('/signup', controller.user.tampilRegister)
 server.post('/login', controller.user.login)
-server.get('/login', controller.user.tampilLogin)
 
 //route untuk mahasiswa
 server.get('/editprogress/:jenisFile', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilEditProgress)
