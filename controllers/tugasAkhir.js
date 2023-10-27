@@ -82,8 +82,9 @@ controller.saveDosbing = async (req, res) => {
                 message: 'Harap isi semua Field'
             })
         }
+        
         console.log("berapa :",idDosbing)
-        const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
+        const currentDate = new Date(); 
         const dosbing = await models.tugasAkhir.create({
             nim: nimMahasiswa,
             id_dosbing: idDosbing,
