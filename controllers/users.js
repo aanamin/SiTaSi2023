@@ -137,6 +137,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
+                    user:req.session.user.type,
                     success: true
                 });
             }
@@ -172,6 +173,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
+                    user:req.session.user.type,
                     success: true
                 });
             }
@@ -194,6 +196,7 @@ controllers.login = async (req, res) => {
                 req.session.user.type = 'admin'
                 const token = generateAccessToken({
                     niu
+                    
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
 
@@ -205,6 +208,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
+                    user:req.session.user.type,
                     success: true
                 });
             }

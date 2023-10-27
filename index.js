@@ -1,4 +1,4 @@
-const dotenv = require('dotenv'); 
+const dotenv = require('dotenv');
 dotenv.config();
 const express = require('express')
 const app = express()
@@ -12,12 +12,19 @@ const auth = require('./routes/user.js')
 const fileUpload = require('express-fileupload');
 const uploadRoute = require('./routes/user.js');
 const session = require('express-session');
+const cors = require('cors')
 
 app.use(session({
   secret: 'amin',
   resave: false,
   saveUninitialized: false
 }));
+app.use(
+  cors({
+    origin: "http://localhost:3001", // Ganti dengan alamat asal frontend Anda
+    credentials: true, // Mengizinkan kredensial (cookies, header otentikasi, dll.)
+  })
+);
 app.use(fileUpload());
 app.use('/upSignature', uploadRoute);
 app.use('/upresources', uploadRoute);
@@ -36,7 +43,9 @@ database.authenticate()
 
 
 app.use(express.json())
-app.use(express.urlencoded({extended: true}))
+app.use(express.urlencoded({
+  extended: true
+}))
 app.set('view engine', 'ejs');
 app.use('/views', express.static(__dirname + '/views'));
 app.use(server)
