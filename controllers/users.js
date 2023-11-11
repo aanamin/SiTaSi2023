@@ -134,10 +134,12 @@ controllers.login = async (req, res) => {
                     httpOnly: true,
                     maxAge: 100 * 60 * 1000,
                 })
+                console.log("ini tokennya", token)
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
                     user:req.session.user.type,
+                    nomorinduk: req.session.user.id,
                     success: true
                 });
             }
@@ -174,6 +176,7 @@ controllers.login = async (req, res) => {
                     token: token,
                     msg: 'Login Berhasil',
                     user:req.session.user.type,
+                    nomorinduk: req.session.user.id,
                     success: true
                 });
             }
@@ -209,6 +212,7 @@ controllers.login = async (req, res) => {
                     token: token,
                     msg: 'Login Berhasil',
                     user:req.session.user.type,
+                    nomorinduk: req.session.user.id,
                     success: true
                 });
             }

@@ -56,6 +56,7 @@ controller.tampilPilihDosbing = async (req, res) => {
                 }
             }
         });
+    
         // menggunakan data dosen tersebut dengan mengirim dalam bentuk JSON
         res.status(200).json({
             dosenData: dosenData,
@@ -71,7 +72,7 @@ controller.tampilPilihDosbing = async (req, res) => {
 //controller untuk nyimpan hasil pemilihan dosbing
 controller.saveDosbing = async (req, res) => {
     try {
-        const nimMahasiswa = req.session.user.id
+        const nimMahasiswa = req.headers.nomorinduk.split(" ")[1];
         const {
             idDosbing,
             judul,
