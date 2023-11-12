@@ -27,9 +27,9 @@ server.get('/detailDocuments/:document_id', verifyToken, authorization('mahasisw
 server.get('/progress',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilAllProgress)
 server.post('/upprogress/:jenisFile',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadProgress)
 server.get('/upprogress/:jenisFile',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatProgress)
-server.get('/pilihdosbing',verifyToken, controller.tugasAkhir.tampilPilihDosbing)
+server.get('/pilihdosbing',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
 // server.get('/pilihdosbing',authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
-server.post('/pilihdosbing',verifyToken,controller.tugasAkhir.saveDosbing)
+server.post('/pilihdosbing',verifyToken,authorization('mahasiswa'),controller.tugasAkhir.saveDosbing)
 server.post('/editprofil',verifyToken,authorization('mahasiswa'), controller.user.editprofilmahasiswa)
 
 

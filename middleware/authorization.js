@@ -1,6 +1,10 @@
 module.exports = (userType) => {
-    return (req, res, next) => {
-      if (req.session.user && req.session.user.userType === userType) {
+  
+  return (req, res, next) => {
+      const tipe = req.headers.tipe.split(" ")[1];
+      console.log("tipenya :",tipe);
+     
+      if (req.user && tipe === userType) {
         console.log("okei, berhasil dengan", userType);
         next(); // Lanjutkan ke rute berikutnya jika otorisasi sesuai
       } else {

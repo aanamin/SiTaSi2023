@@ -35,7 +35,6 @@ controllers.logout = async (req, res) => {
 
             res.clearCookie('accessToken');
 
-            res.render('login')
         });
     } catch (error) {
         console.log(error)
@@ -125,7 +124,7 @@ controllers.login = async (req, res) => {
                 req.session.user.type = 'mahasiswa'
                 
                 const token = generateAccessToken({
-                    nim
+                    nomorinduk
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
 

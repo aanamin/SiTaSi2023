@@ -21,7 +21,7 @@ const {
 //tampil page progress TA page Mahasiswa
 controller.tampilAllProgress = async (req, res) => {
     try {
-        const nimMahasiswa = req.session.user.id;
+        const nimMahasiswa = req.user.nomorinduk;
 
         const progress = await models.tugasAkhir.findAll({
             where: {
@@ -72,7 +72,7 @@ controller.tampilPilihDosbing = async (req, res) => {
 //controller untuk nyimpan hasil pemilihan dosbing
 controller.saveDosbing = async (req, res) => {
     try {
-        const nimMahasiswa = req.headers.nomorinduk.split(" ")[1];
+        const nimMahasiswa = req.user.nomorinduk
         const {
             idDosbing,
             judul,
@@ -110,7 +110,7 @@ controller.saveDosbing = async (req, res) => {
 controller.uploadProgress = async (req, res) => {
 
     try {
-        const nim = req.session.user.id
+        const nim = req.user.nomorinduk
         const jenisFile = req.params.jenisFile
 
         if (!req.files || Object.keys(req.files).length === 0) {
@@ -231,7 +231,7 @@ controller.uploadProgress = async (req, res) => {
 //tampil buat progress
 controller.tampilBuatProgress = async (req, res) => {
     try {
-        const nim = req.session.user.id
+        const nim = req.user.nomorinduk
         const jenisFile = req.params.jenisFile
         const tugasAkhir = await models.tugasAkhir.findOne({
             where: {
@@ -276,7 +276,7 @@ controller.tampilBuatProgress = async (req, res) => {
 controller.tampilEditProgress = async (req, res) => {
 
     try {
-        const nim = req.session.user.id
+        const nim = req.user.nomorinduk
 
         const jenisFile = req.params.jenisFile
         const ta = await models.tugasAkhir.findOne({
@@ -369,7 +369,7 @@ controller.tampilEditProgress = async (req, res) => {
 
 controller.editprogress = async (req, res) => {
     try {
-        const nim = req.session.user.id
+        const nim = req.user.nomorinduk
         const jenisFile = req.params.jenisFile
         const tugasAkhir = await models.tugasAkhir.findOne({
             where: {
@@ -494,7 +494,7 @@ controller.editprogress = async (req, res) => {
 controller.deleteProposal = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -535,7 +535,7 @@ controller.deleteProposal = async (req, res) => {
 controller.deleteBab1 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -578,7 +578,7 @@ controller.deleteBab1 = async (req, res) => {
 controller.deleteBab2 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -620,7 +620,7 @@ controller.deleteBab2 = async (req, res) => {
 controller.deletebab3 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -662,7 +662,7 @@ controller.deletebab3 = async (req, res) => {
 controller.deletebab4 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -704,7 +704,7 @@ controller.deletebab4 = async (req, res) => {
 controller.deletebab5 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -746,7 +746,7 @@ controller.deletebab5 = async (req, res) => {
 controller.deletebab6 = async (req, res) => {
 
     try {
-        const nim = req.session.user.id;
+        const nim = req.user.nomorinduk;
 
         const ta = await models.tugasAkhir.findOne({
             where: {
@@ -791,7 +791,7 @@ controller.detailDokumen = async (req, res) => {
     const {
         jenisFile
     } = req.params;
-    const nim = req.session.user.id
+    const nim = req.user.nomorinduk
     const tugasAkhir = await models.tugasAkhir.findOne({
         where: {
             nim: nim
@@ -805,7 +805,7 @@ controller.detailDokumen = async (req, res) => {
 
 controller.tampilSemhas = async (req, res) => {
     try {
-        const nimMahasiswa = req.session.user.id
+        const nimMahasiswa = req.user.nomorinduk
         const semhas = await models.tugasAkhir.findOne({
             where: {
                 nim: nimMahasiswa
@@ -829,7 +829,7 @@ controller.tampilSemhas = async (req, res) => {
 // untuk menampilkan pengajuan semhas
 controller.tampilPengajuanSemhas = async (req, res) => {
     try {
-        const nimMahasiswa = req.session.user.id
+        const nimMahasiswa = req.user.nomorinduk
         const semhas = await models.tugasAkhir.findOne({
             where: {
                 nim: nimMahasiswa
@@ -858,7 +858,7 @@ controller.tampilPengajuanSemhas = async (req, res) => {
 // menyimpan hasil pengajuan semhas
 controller.pengajuanSemhas = async (req, res) => {
     try {
-        const nim = req.session.user.id
+        const nim = req.user.nomorinduk
 
         if (!req.files.formulir || Object.keys(req.files.formulir).length === 0) {
             return res.status(400).json({

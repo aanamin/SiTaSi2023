@@ -17,7 +17,7 @@ const {
 // controller menampilkan semua request dosbing
 controller.tampilRequestDosbing = async (req, res) => {
     try {
-        const nip = req.session.user.id
+        const nip = req.user.nomorinduk
         const bimbingan = await models.tugasAkhir.findAll({
             where: {
                 id_dosbing: nip,
@@ -43,7 +43,7 @@ controller.tampilRequestDosbing = async (req, res) => {
 // controller menampilkan semua request dosbing
 controller.tampilDetailRequest = async (req, res) => {
     try {
-        const nip = req.session.user.id
+        const nip = req.user.nomorinduk
         const nimMahasiswa = req.params.nimMahasiswa
         const bimbingan = await models.tugasAkhir.findOne({
             where: {
@@ -145,7 +145,7 @@ controller.rejectRequestDosbing = async(req,res)=>{
 // menampilkan semua mahasiswa bimbingan
 controller.mahasiswaBimbingan = async (req, res) => {
     try {
-        const nip = req.session.user.id
+        const nip = req.user.nomorinduk
         const ta = await models.tugasAkhir.findAll({
             where: {
                 id_dosbing: nip,
