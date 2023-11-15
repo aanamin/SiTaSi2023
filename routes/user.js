@@ -30,6 +30,7 @@ server.get('/upprogress/:jenisFile',verifyToken, authorization('mahasiswa'), con
 server.get('/pilihdosbing',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
 // server.get('/pilihdosbing',authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
 server.post('/pilihdosbing',verifyToken,authorization('mahasiswa'),controller.tugasAkhir.saveDosbing)
+server.post('/tampilstatus',verifyToken,authorization('mahasiswa'),controller.tugasAkhir.statusdosbing)
 server.post('/editprofil',verifyToken,authorization('mahasiswa'), controller.user.editprofilmahasiswa)
 
 
