@@ -56,7 +56,7 @@ controller.tampilPilihDosbing = async (req, res) => {
                 }
             }
         });
-    
+        
         // menggunakan data dosen tersebut dengan mengirim dalam bentuk JSON
         res.status(200).json({
             dosenData: dosenData,
@@ -101,6 +101,27 @@ controller.saveDosbing = async (req, res) => {
         console.error('Terdapat Error Pada: ', error)
         res.status(500).json({
             message: 'terjadi kesalahan dalam menyimpan dosbing'
+        })
+    }
+}
+
+controller.statusdosbing = async(req,res)=>{
+    try {
+        const nimMahasiswa = req.user.nomorinduk
+        const status = await models.tugasAkhir.findOne({
+            where:{
+                nim : nimMahasiswa
+            }
+        })
+        if (status) {
+            res.status(200).json({
+                status: status
+            })
+        }
+    } catch (error) {
+        console.error('Terdapat Error Pada: ', error)
+        res.status(500).json({
+            message: 'terjadi kesalahan dalam menampilkan status dosbing'
         })
     }
 }
