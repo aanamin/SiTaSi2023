@@ -114,8 +114,15 @@ controller.statusdosbing = async(req,res)=>{
             }
         })
         if (status) {
+            const namaDosen = await models.dosen.findOne({
+                where: {
+                    nip: status.id_dosbing
+                },
+                attributes:['nama_dosen']
+            })
             res.status(200).json({
-                status: status
+                status: status,
+                namaDosen: namaDosen
             })
         }
     } catch (error) {
