@@ -24,13 +24,38 @@ controller.tampilRequestDosbing = async (req, res) => {
                 status_judul : 'pengajuan'
             }
         })
+        let mahasiswaData = [];
+        if (bimbingan.length > 0) {
+            // Iterasi melalui setiap elemen hasil
+            for (const result of bimbingan) {
+              const mahasiswa = await models.mahasiswa.findOne({
+                where: {
+                  nim: result.nim
+                }
+              });
+        
+              if (mahasiswa) {
+                mahasiswaData.push({
+                    nama: mahasiswa.nama_mahasiswa,
+                    nim: mahasiswa.nim
+                  });
+                console.log(`Nama Mahasiswa: ${mahasiswa.nama_mahasiswa}, NIM: ${mahasiswa.nim}`);
+              } else {
+                console.log(`Mahasiswa dengan NIM ${result.nim} tidak ditemukan.`);
+              }
+            }
+          } else {
+            console.log("Tidak ada data bimbingan yang memenuhi kriteria.");
+          }
+          console.log("nama",mahasiswaData);
         if (!bimbingan) {
             res.status(404).json({
                 message: 'tidak ada mahasiswa yang meminta request'
             })
         }
         res.status(200).json({
-            bimbingan: bimbingan
+            bimbingan: bimbingan,
+            mahasiswa:mahasiswaData
         })
     } catch (error) {
         console.error('Terdapat masalah: ', error)
