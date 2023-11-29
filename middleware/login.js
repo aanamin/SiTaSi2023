@@ -15,6 +15,7 @@ const verifyToken = (req, res, next) => {
           }
           console.log("okei, berhasil ", token)
           req.user = user;
+          console.log(req.user);
           next();
         });
     } else {

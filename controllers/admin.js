@@ -69,4 +69,20 @@ controller.tambahAkunDosen = async (req, res) => {
     }
 }
 
+controller.tampilProfilAdmin = async (req,res) =>{
+    try {
+        const nomorinduk = req.user.nomorinduk
+        console.log(nomorinduk);
+        const profilAdmin= await models.admin.findOne({
+            where: {
+                niu: nomorinduk
+            }
+        })
+        res.status(200).json({
+            profilAdmin: profilAdmin
+        })
+    } catch (error) {
+        console.log("terdapat error : ", error);
+    }
+}
 module.exports = controller

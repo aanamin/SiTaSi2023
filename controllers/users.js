@@ -162,7 +162,7 @@ controllers.login = async (req, res) => {
                 req.session.user.type = 'dosen'
 
                 const token = generateAccessToken({
-                    nip
+                    nomorinduk
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
 
@@ -197,7 +197,7 @@ controllers.login = async (req, res) => {
                 req.session.user.id = niu
                 req.session.user.type = 'admin'
                 const token = generateAccessToken({
-                    niu
+                    nomorinduk
                     
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
