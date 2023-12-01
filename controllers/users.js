@@ -43,9 +43,6 @@ controllers.logout = async (req, res) => {
 }
 
 
-
-
-
 controllers.register = async (req, res) => {
     try {
         const {
@@ -73,7 +70,7 @@ controllers.register = async (req, res) => {
             jenis_kelamin: jenisKelamin,
             password: password
         });
-        res.json({
+        res.status(200).json({
             msg: "Register Berhasil"
         });
     } catch (error) {
