@@ -8,6 +8,9 @@ const {
     v4: uuidv4
 } = require('uuid');
 const admin = require('../models/admin')
+const {
+    propfind
+} = require('../routes/user')
 
 dotenv.config();
 process.env.SECRET_TOKEN;
@@ -119,7 +122,7 @@ controllers.login = async (req, res) => {
 
                 req.session.user.id = nim
                 req.session.user.type = 'mahasiswa'
-                
+
                 const token = generateAccessToken({
                     nomorinduk
                 }, process.env.SECRET_TOKEN);
@@ -134,7 +137,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
-                    user:req.session.user.type,
+                    user: req.session.user.type,
                     nomorinduk: req.session.user.id,
                     success: true
                 });
@@ -171,7 +174,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
-                    user:req.session.user.type,
+                    user: req.session.user.type,
                     nomorinduk: req.session.user.id,
                     success: true
                 });
@@ -195,7 +198,7 @@ controllers.login = async (req, res) => {
                 req.session.user.type = 'admin'
                 const token = generateAccessToken({
                     nomorinduk
-                    
+
                 }, process.env.SECRET_TOKEN);
                 // const token = generateAccessToken({email: req.body.email})
 
@@ -207,7 +210,7 @@ controllers.login = async (req, res) => {
                 res.status(200).json({
                     token: token,
                     msg: 'Login Berhasil',
-                    user:req.session.user.type,
+                    user: req.session.user.type,
                     nomorinduk: req.session.user.id,
                     success: true
                 });
@@ -230,35 +233,36 @@ controllers.login = async (req, res) => {
     }
 }
 
-controllers.profil = async(req,res)=>{
+controllers.profil = async (req, res) => {
     try {
-        if(req.session.type ==='dosen'){
-            const nip = req.session.id
+        if (req.headers.tipe.split(" ")[1] === 'dosen') {
+            const nip = req.user.nomorinduk
             const profil = await models.dosen.findOne({
-                where:{
+                where: {
                     nip: nip
                 }
             })
             res.status(200).json({
                 profil: profil
             })
-        }else if(req.session.type === 'admin'){
-            const niu = req.session.id
+        } else if (req.headers.tipe.split(" ")[1] === 'admin') {
+            const niu = req.user.nomorinduk
             const profil = await models.dosen.findOne({
-                where:{
+                where: {
                     niu: niu
                 }
             })
             res.status(200).json({
                 profil: profil
             })
-        }else if(req.session.type ==='mahasiswa'){
-            const nim = req.session.id
+        } else if (req.headers.tipe.split(" ")[1] === 'mahasiswa') {
+            const nim = req.user.nomorinduk
             const profil = await models.mahasiswa.findOne({
                 where: {
-                    nim:nim
+                    nim: nim
                 }
             })
+            console.log("profilnya", profil);
             res.status(200).json({
                 profil: profil
             })
@@ -269,104 +273,157 @@ controllers.profil = async(req,res)=>{
 }
 
 // editprofil
-controllers.editprofildosen = async(req,res)=>{
+controllers.editprofildosen = async (req, res) => {
     try {
-        const { nip, jenisKelamin, password, nama} = req.body
-        const nipDosen = req.session.user.id
+        const {
+            jenisKelamin,
+            nama,
+            newPassword
+        } = req.body
+        console.log("pass baru: ", newPassword, "ini");
+        const nipDosen = req.user.nomorinduk
         const dosenlama = await models.dosen.findOne({
             where: {
                 nip: nipDosen
             }
         })
-        if(!dosenlama){
+        if (!dosenlama) {
             res.status(404).json({
                 message: 'maaf tidak ditemukan profilnya'
             })
         }
-
-        const profilBaru = await models.dosen.update({
-            nip: nip,
-            jenis_kelamin: jenisKelamin,
-            nama_dosen: nama,
-            password: password
-        }, {
-            where:{
-                nip:nipDosen
-            }
-        })
-        res.status(200).json({
-            message: 'profil telah diperbarui'
-        })
+        if (newPassword === "") {
+            const profilBaru = await models.dosen.update({
+                jenis_kelamin: jenisKelamin,
+                nama_dosen: nama,
+            }, {
+                where: {
+                    nip: nipDosen
+                }
+            })
+            return res.status(200).json({
+                profilBaru: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        } else {
+            const profilBaru = await models.dosen.update({
+                jenis_kelamin: jenisKelamin,
+                nama_dosen: nama,
+                password: newPassword
+            }, {
+                where: {
+                    nip: nipDosen
+                }
+            })
+            return res.status(200).json({
+                profilBaru: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        }
     } catch (error) {
         console.log(error)
     }
 }
 
 // edit profil mahasiswa
-controllers.editprofilmahasiswa = async(req,res)=>{
+controllers.editprofilmahasiswa = async (req, res) => {
     try {
-        const { nim, jenisKelamin, password, nama} = req.body
-        const nimMahasiswa = req.session.user.id
+        const {
+            jenisKelamin,
+            nama,
+            newPassword
+        } = req.body
+        const nimMahasiswa = req.user.nomorinduk
         const mahasiswalama = await models.mahasiswa.findOne({
             where: {
                 nim: nimMahasiswa
             }
         })
-        if(!mahasiswalama){
+        if (!mahasiswalama) {
             res.status(404).json({
                 message: 'maaf tidak ditemukan profilnya'
             })
         }
-
-        const profilBaru = await models.mahasiswa.update({
-            nim: nim,
-            jenis_kelamin: jenisKelamin,
-            nama_mahasiswa: nama,
-            password: password
-        }, {
-            where:{
-                nim:nimMahasiswa
-            }
-        })
-        res.status(200).json({
-            profil: profilBaru,
-            message: 'profil telah diperbarui'
-        })
+        if (newPassword === "") {
+            const profilBaru = await models.mahasiswa.update({
+                jenis_kelamin: jenisKelamin,
+                nama_mahasiswa: nama
+            }, {
+                where: {
+                    nim: nimMahasiswa
+                }
+            })
+            return res.status(200).json({
+                profil: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        } else {
+            const profilBaru = await models.mahasiswa.update({
+                jenis_kelamin: jenisKelamin,
+                nama_mahasiswa: nama,
+                password: newPassword
+            }, {
+                where: {
+                    nim: nimMahasiswa
+                }
+            })
+            return res.status(200).json({
+                profil: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        }
     } catch (error) {
         console.log(error)
     }
 }
 
 // edit profil admin
-controllers.editprofiladmin = async(req,res)=>{
+controllers.editprofiladmin = async (req, res) => {
     try {
-        const { niu, jenisKelamin, password, nama} = req.body
-        const niuAdmin = req.session.user.id
+        const {
+            jenisKelamin,
+            nama,
+            newPassword
+        } = req.body
+        const niuAdmin = req.user.nomorinduk
         const adminlama = await models.admin.findOne({
             where: {
                 niu: niuAdmin
             }
         })
-        if(!adminlama){
+        if (!adminlama) {
             res.status(404).json({
                 message: 'maaf tidak ditemukan profilnya'
             })
         }
-
-        const profilBaru = await models.admin.update({
-            nim: niu,
-            jenis_kelamin: jenisKelamin,
-            nama_admin: nama,
-            password: password
-        }, {
-            where:{
-                nim:niuAdmin
-            }
-        })
-        res.status(200).json({
-            profil: profilBaru,
-            message: 'profil telah diperbarui'
-        })
+        if (newPassword === "") {
+            const profilBaru = await models.admin.update({
+                jenis_kelamin: jenisKelamin,
+                nama_admin: nama
+            }, {
+                where: {
+                    nim: niuAdmin
+                }
+            })
+            res.status(200).json({
+                profil: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        } else {
+            const profilBaru = await models.admin.update({
+                jenis_kelamin: jenisKelamin,
+                nama_admin: nama,
+                password: newPassword
+            }, {
+                where: {
+                    nim: niuAdmin
+                }
+            })
+            return res.status(200).json({
+                profil: profilBaru,
+                message: 'profil telah diperbarui'
+            })
+        }
     } catch (error) {
         console.log(error)
     }
