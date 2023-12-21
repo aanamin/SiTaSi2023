@@ -53,5 +53,6 @@ server.get('/profildosen',verifyToken,authorization('dosen'), controller.user.pr
 server.get('/listdosen', verifyToken, authorization('admin'), controller.admin.tampilListDosen)
 server.get('/tampilprofiladmin', verifyToken, authorization('admin'), controller.admin.tampilProfilAdmin)
 server.post('/tambahakundosen', verifyToken, authorization('admin'), controller.admin.tambahAkunDosen)
-server.post('/editprofil', verifyToken, authorization('admin'), controller.user.editprofiladmin)
+server.post('/editprofiladmin', verifyToken, authorization('admin'), controller.user.editprofiladmin)
+server.get('/profiladmin', verifyToken, authorization('admin'), controller.user.profil)
 module.exports = server

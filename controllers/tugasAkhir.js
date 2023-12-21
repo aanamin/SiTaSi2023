@@ -831,130 +831,130 @@ controller.detailDokumen = async (req, res) => {
 }
 
 
-controller.tampilSemhas = async (req, res) => {
-    try {
-        const nimMahasiswa = req.user.nomorinduk
-        const semhas = await models.tugasAkhir.findOne({
-            where: {
-                nim: nimMahasiswa
-            }
-        })
-        if (!semhas) {
-            res.status(404).json({
-                message: 'maaf, silahkan upload progress terlebih dahulu'
-            })
-        }
-        res.status(200).json({
-            semhas: semhas
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: 'terjadi masalah'
-        })
-    }
-}
+// controller.tampilSemhas = async (req, res) => {
+//     try {
+//         const nimMahasiswa = req.user.nomorinduk
+//         const semhas = await models.tugasAkhir.findOne({
+//             where: {
+//                 nim: nimMahasiswa
+//             }
+//         })
+//         if (!semhas) {
+//             res.status(404).json({
+//                 message: 'maaf, silahkan upload progress terlebih dahulu'
+//             })
+//         }
+//         res.status(200).json({
+//             semhas: semhas
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             message: 'terjadi masalah'
+//         })
+//     }
+// }
 
-// untuk menampilkan pengajuan semhas
-controller.tampilPengajuanSemhas = async (req, res) => {
-    try {
-        const nimMahasiswa = req.user.nomorinduk
-        const semhas = await models.tugasAkhir.findOne({
-            where: {
-                nim: nimMahasiswa
-            }
-        })
-        if (!semhas) {
-            res.status(404).json({
-                message: 'maaf, silahkan upload progress terlebih dahulu'
-            })
-        }
-        if (semhas.status_bab6 !== 'accept') {
-            res.status(401).json({
-                message: 'Maaf silahkan selesaikan TA anda terlebih dahulu'
-            })
-        }
-        res.status(200).json({
-            semhas: semhas
-        })
-    } catch (error) {
-        res.status(500).json({
-            message: 'terjadi masalah'
-        })
-    }
-}
+// // untuk menampilkan pengajuan semhas
+// controller.tampilPengajuanSemhas = async (req, res) => {
+//     try {
+//         const nimMahasiswa = req.user.nomorinduk
+//         const semhas = await models.tugasAkhir.findOne({
+//             where: {
+//                 nim: nimMahasiswa
+//             }
+//         })
+//         if (!semhas) {
+//             res.status(404).json({
+//                 message: 'maaf, silahkan upload progress terlebih dahulu'
+//             })
+//         }
+//         if (semhas.status_bab6 !== 'accept') {
+//             res.status(401).json({
+//                 message: 'Maaf silahkan selesaikan TA anda terlebih dahulu'
+//             })
+//         }
+//         res.status(200).json({
+//             semhas: semhas
+//         })
+//     } catch (error) {
+//         res.status(500).json({
+//             message: 'terjadi masalah'
+//         })
+//     }
+// }
 
-// menyimpan hasil pengajuan semhas
-controller.pengajuanSemhas = async (req, res) => {
-    try {
-        const nim = req.user.nomorinduk
+// // menyimpan hasil pengajuan semhas
+// controller.pengajuanSemhas = async (req, res) => {
+//     try {
+//         const nim = req.user.nomorinduk
 
-        if (!req.files.formulir || Object.keys(req.files.formulir).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        if (!req.files.fullta || Object.keys(req.files.fullta).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
+//         if (!req.files.formulir || Object.keys(req.files.formulir).length === 0) {
+//             return res.status(400).json({
+//                 message: 'Tidak ada file yang diunggah'
+//             });
+//         }
+//         if (!req.files.fullta || Object.keys(req.files.fullta).length === 0) {
+//             return res.status(400).json({
+//                 message: 'Tidak ada file yang diunggah'
+//             });
+//         }
 
-        const formulir = req.files.formulir;
-        const fileExtension = formulir.name.split('.').pop();
-        const fileName = `formulirSemhas${nim}.${fileExtension}`;
+//         const formulir = req.files.formulir;
+//         const fileExtension = formulir.name.split('.').pop();
+//         const fileName = `formulirSemhas${nim}.${fileExtension}`;
 
-        if (fs.existsSync(`uploads/${fileName}`)) {
-            // Jika ada, hapus file lama
-            fs.unlinkSync(`uploads/${fileName}`);
-        }
+//         if (fs.existsSync(`uploads/${fileName}`)) {
+//             // Jika ada, hapus file lama
+//             fs.unlinkSync(`uploads/${fileName}`);
+//         }
 
-        const fullta = req.files.fullta
-        const formatFile = fullta.name.split('.').pop();
-        const namaFile = `fullta${nim}.${formatFile}`;
+//         const fullta = req.files.fullta
+//         const formatFile = fullta.name.split('.').pop();
+//         const namaFile = `fullta${nim}.${formatFile}`;
 
-        if (fs.existsSync(`uploads/${namaFile}`)) {
-            // Jika ada, hapus file lama
-            fs.unlinkSync(`uploads/${namaFile}`);
-        }
+//         if (fs.existsSync(`uploads/${namaFile}`)) {
+//             // Jika ada, hapus file lama
+//             fs.unlinkSync(`uploads/${namaFile}`);
+//         }
 
-        formulir.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
+//         formulir.mv(`uploads/${fileName}`, async (err) => {
+//             if (err) {
+//                 console.log(err)
+//                 return res.status(500).json({
+//                     message: 'Terjadi kesalahan saat mengunggah file'
+//                 });
+//             }
 
 
-        });
+//         });
 
-        fullta.mv(`uploads/${namaFile}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
+//         fullta.mv(`uploads/${namaFile}`, async (err) => {
+//             if (err) {
+//                 console.log(err)
+//                 return res.status(500).json({
+//                     message: 'Terjadi kesalahan saat mengunggah file'
+//                 });
+//             }
 
-        });
-        await models.tugasAkhir.update({
-            formulir_semhas: fileName,
-            full: namaFile
-        }, {
-            where: {
-                nim: nim
-            }
-        })
-        res.status(200).json({
-            message: `${fileName} & ${namaFile} berhasil diupload`
-        })
-    } catch (error) {
-        console.log(error)
-        res.status.json({
-            message: error
-        })
-    }
-}
+//         });
+//         await models.tugasAkhir.update({
+//             formulir_semhas: fileName,
+//             full: namaFile
+//         }, {
+//             where: {
+//                 nim: nim
+//             }
+//         })
+//         res.status(200).json({
+//             message: `${fileName} & ${namaFile} berhasil diupload`
+//         })
+//     } catch (error) {
+//         console.log(error)
+//         res.status.json({
+//             message: error
+//         })
+//     }
+// }
 
 //tampil pengajuan sidang
 controller.tampilPengajuanSidang = async(req,res)=>{

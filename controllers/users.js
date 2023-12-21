@@ -247,7 +247,7 @@ controllers.profil = async (req, res) => {
             })
         } else if (req.headers.tipe.split(" ")[1] === 'admin') {
             const niu = req.user.nomorinduk
-            const profil = await models.dosen.findOne({
+            const profil = await models.admin.findOne({
                 where: {
                     niu: niu
                 }
