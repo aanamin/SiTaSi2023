@@ -95,6 +95,7 @@ controller.tampilDetailRequest = async (req, res) => {
 // acc request dosbing
 controller.accRequestDosbing = async(req,res)=>{
     try {
+        const nip = req.user.nomorinduk
         const nimMahasiswa = req.params.nimMahasiswa
         const request = await models.tugasAkhir.findOne({
             where:{

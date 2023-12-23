@@ -13,6 +13,7 @@ const fileUpload = require('express-fileupload');
 const uploadRoute = require('./routes/user.js');
 const session = require('express-session');
 const cors = require('cors')
+const bodyParser = require('body-parser');
 
 app.use(session({
   secret: 'amin',
@@ -29,6 +30,8 @@ app.use(fileUpload());
 app.use('/upSignature', uploadRoute);
 app.use('/upresources', uploadRoute);
 
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use('/auth', auth);

@@ -1,40 +1,41 @@
-
-const {sequelize, DataTypes, err} = require('sequelize')
+const {sequelize, DataTypes,err} = require('sequelize')
 const db = require('../config/dbConfig.js')
-const signature = require('./dosen.js')
 
-var tugasAkhir = db.define('tugasAkhir',{
-    id_ta: {
-        type            :DataTypes.INTEGER,
+var detail_tugasAkhir = db.define('detail_tugasAkhir',{
+    id_progress: {
+        type            : DataTypes.INTEGER,
         primaryKey      : true,
         autoIncrement   : true,
         allowNull       : false
+      },
+    id_ta:{
+        type        : DataTypes.INTEGER,
+        allowNull   : false
     },
-    nim : {
+    nama_progress:{
+        type        : DataTypes.STRING,
+        allowNull   : false 
+    },
+    nama_file:{
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    id_dosbing : {
+    saran_masukan:{
         type        : DataTypes.STRING,
-        allowNull   : false,
+        allowNull   : true
     },
-    judul :{
+    deskripsi_progress:{
         type        : DataTypes.STRING,
         allowNull   : false
     },
-    detail_ide:{
-        type        :DataTypes.STRING,
-        allowNull:false
-    },
-    tanggal_judul :{
+    tanggal_pengajuan:{
         type        : DataTypes.DATEONLY,
-        allowNull   : true
+        allowNull   : false
     },
-    status_judul :{
-        type        : DataTypes.STRING,
-        allowNull   : true
+    status_pengajuan:{
+        type        :DataTypes.STRING,
+        allowNull   : false
     },
-
     created_at : {
         type        : DataTypes.DATE,
         allowNull   : false
@@ -43,7 +44,7 @@ var tugasAkhir = db.define('tugasAkhir',{
         type        : DataTypes.DATE,
         allowNull   : false
     }
-}, 
+},
 {
     freezeTableName : true,
     timestamps  : true,
@@ -51,5 +52,4 @@ var tugasAkhir = db.define('tugasAkhir',{
     updatedAt: 'updated_at'
 })
 
-
-module.exports = tugasAkhir
+module.exports = detail_tugasAkhir
