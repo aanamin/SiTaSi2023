@@ -23,7 +23,7 @@ controller.tampilAllProgress = async (req, res) => {
     try {
         const nimMahasiswa = req.user.nomorinduk;
 
-        const ta = await models.tugasAkhir.findAll({
+        const ta = await models.tugasAkhir.findOne({
             where: {
                 nim: nimMahasiswa
             }
@@ -203,7 +203,35 @@ controller.statusdosbing = async (req, res) => {
 }
 
 
+controller.tampilSemuaProgress = async (req, res) => {
+    try {
+        const nim = req.user.nomorinduk
+        const progress = await models.tugasAkhir.findOne({
+            where:{
+                nim: nim
+            }
+        })
+        const ta = await models.detail_tugasAkhir.findAll({
+            where: {
+                id_ta: progress.id_ta
+            }
+        })
+        if(!ta){
+            res.status(404).json({
+                message: "error"
+            })
+        }
 
+        res.status(200).json({
+            progress: ta
+        })
+    } catch (error) {
+        console.error('Kesalahan:', error);
+        res.status(500).json({
+            message: 'Terjadi kesalahan dalam mengambil data progress mahasiswa bimbingan.'
+        });
+    }
+}
 
 //tampil buat progress
 controller.tampilBuatProgress = async (req, res) => {
