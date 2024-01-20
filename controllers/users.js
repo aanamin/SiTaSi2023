@@ -54,6 +54,11 @@ controllers.register = async (req, res) => {
             jenisKelamin,
             password
         } = req.body;
+        if (!nim.startsWith("211152")) {
+            return res.status(400).json({
+                msg: 'Anda bukan mahasiswa Sistem Informasi'
+            });
+        }
 
 
         const existingMahasiswa = await models.mahasiswa.findOne({
@@ -99,12 +104,12 @@ controllers.login = async (req, res) => {
                 nim: nomorinduk
             }
         });
-        const isdosen = await dosen.findOne({
+        const isdosen = await models.dosen.findOne({
             where: {
                 nip: nomorinduk
             }
         });
-        const isadmin = await admin.findOne({
+        const isadmin = await models.admin.findOne({
             where: {
                 niu: nomorinduk
             }
@@ -222,6 +227,10 @@ controllers.login = async (req, res) => {
                 });
 
             }
+        }else{
+            return res.status(400).json({
+                message: 'Anda salah memasukkan nomor induk'
+            });
         }
 
     } catch (error) {
@@ -402,7 +411,7 @@ controllers.editprofiladmin = async (req, res) => {
                 nama_admin: nama
             }, {
                 where: {
-                    nim: niuAdmin
+                    niu: niuAdmin
                 }
             })
             res.status(200).json({
@@ -416,7 +425,7 @@ controllers.editprofiladmin = async (req, res) => {
                 password: newPassword
             }, {
                 where: {
-                    nim: niuAdmin
+                    niu: niuAdmin
                 }
             })
             return res.status(200).json({

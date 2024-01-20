@@ -6,20 +6,17 @@ const upload = require('../middleware/upload.js')
 const verifyToken = require('../middleware/login.js')
 const authorization = require('../middleware/authorization.js')
 
-server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.uploadProgress)
+server.post('/upload', upload.single('pdfFile'), controller.tugasAkhir.kontrol_progressta)
 
 // route untk awal
 server.post('/signup', controller.user.register)
 server.post('/login', controller.user.login)
 
 //route untuk mahasiswa
-server.get('/editprogress/:jenisFile', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilEditProgress)
-server.post('/editprogress/:jenisFile', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.editprogress)
-server.post('/deleteProposal', verifyToken,authorization('mahasiswa'), controller.tugasAkhir.deleteProposal)
 server.get('/detailDocuments/:jenisFile', verifyToken, controller.tugasAkhir.detailDokumen)
 server.get('/detailDocuments/:document_id', verifyToken, authorization('mahasiswa'),controller.tugasAkhir.detailDokumen)
 server.get('/progress',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilAllProgress)
-server.post('/upprogress',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.uploadProgress)
+server.post('/upprogress',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.kontrol_progressta)
 server.get('/upprogress',verifyToken, authorization('mahasiswa'), controller.tugasAkhir.tampilBuatProgress)
 server.get('/pilihdosbing',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
 // server.get('/pilihdosbing',authorization('mahasiswa'), controller.tugasAkhir.tampilPilihDosbing)
@@ -27,6 +24,7 @@ server.post('/pilihdosbing',verifyToken,authorization('mahasiswa'),controller.tu
 server.get('/tampilstatus',verifyToken,authorization('mahasiswa'),controller.tugasAkhir.statusdosbing)
 server.post('/editprofilmahasiswa',verifyToken,authorization('mahasiswa'), controller.user.editprofilmahasiswa)
 server.get('/profil',verifyToken,authorization('mahasiswa'), controller.user.profil)
+server.delete('/deleteprogress/:id_progress',verifyToken,authorization('mahasiswa'), controller.tugasAkhir.deleteProgress)
 
 
 

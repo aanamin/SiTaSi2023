@@ -16,6 +16,7 @@ const {
 const {
     tugasAkhir
 } = require('.');
+const { log } = require('console');
 
 
 //tampil page progress TA page Mahasiswa
@@ -52,7 +53,7 @@ controller.tampilAllProgress = async (req, res) => {
 
 //upload dokumen 
 //upload proposal
-controller.uploadProgress = async (req, res) => {
+controller.kontrol_progressta = async (req, res) => {
 
     try {
         const nim = req.user.nomorinduk
@@ -66,7 +67,11 @@ controller.uploadProgress = async (req, res) => {
                 nim: nim
             }
         })
-        console.log("ta dari ", ta.id_ta);
+        if(ta.status_judul != "accept"){
+            return res.status(400).json({
+                message: 'Maaf judul anda belum di acc'
+            });
+        }
         if (!req.files || Object.keys(req.files).length === 0) {
             return res.status(400).json({
                 message: 'Tidak ada file yang diunggah'
@@ -114,6 +119,58 @@ controller.uploadProgress = async (req, res) => {
         });
     }
 }
+controller.deleteProgress = async (req,res) =>{
+    try {
+        const nim = req.user.nomorinduk;
+        const id_progress = req.params.id_progress
+        console.log("id_progress", id_progress);
+        const detailTA = await models.detail_tugasAkhir.findOne({
+            where:{
+                id_progress: id_progress
+            }
+        }) 
+        if(detailTA.status_pengajuan!= "pengajuan"){
+            res.status(400).json({
+                message: "Maaf Pengajuan sudah diprogress"
+            })
+        }
+        else {
+            if(!detailTA){
+                res.status(404).json({
+                    message: "Maaf Progess tidak ditemukan"
+                })
+            }
+            const filePath = path.join(__dirname, '..', 'uploads', detailTA.nama_file);
+        
+            fs.unlink(filePath, (err) => {
+                if (err) {
+                    console.error('Gagal menghapus file:', err);
+                }
+            });
+            // Proses penghapusan dokumen berdasarkan ID yang diterima
+            const hapusDetail = await models.detail_tugasAkhir.destroy({
+                where:{
+                    id_progress: id_progress
+                }
+            })
+            if(!hapusDetail){
+                res.status(400).json({
+                    message: "gagal menghapus progres"
+                })
+            }
+            res.status(200).json({
+                message:"Berhasil Dihapus"
+                
+            })
+        }
+    } catch (error) {
+        res.status(400).json({
+            message: "error"
+        })
+        console.log("error", error);
+    }
+}
+
 // tampilin page pilih dosbing
 controller.tampilPilihDosbing = async (req, res) => {
     try {
@@ -278,265 +335,11 @@ controller.tampilBuatProgress = async (req, res) => {
 }
 
 // updateProposal
-controller.tampilEditProgress = async (req, res) => {
-
-    try {
-        const nim = req.user.nomorinduk
-
-        const jenisFile = req.params.jenisFile
-        const ta = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        if (!ta) {
-            return res.status(404).json({
-                success: false,
-                message: 'Tidak ada dokumen dengan id tersebut'
-            })
-        }
-
-        if (jenisFile === 'bab1') {
-            // jika proposalnya sudah di acc maka tidak bisa diubah
-            if (ta) {
-                const status = ta.status_bab1;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'bab2') {
-            if (ta) {
-                const status = ta.status_bab2;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'bab3') {
-            if (ta) {
-                const status = ta.status_bab3;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'proposal') {
-            if (proposal) {
-                const status = ta.status_proposal;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'bab4') {
-            if (ta) {
-                const status = ta.status_bab4;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'bab5') {
-            if (ta) {
-                const status = ta.status_bab5;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        } else if (jenisFile === 'bab6') {
-            if (ta) {
-                const status = ta.status_bab6;
-                if (status === 'accept') {
-                    return res.status(400).json({
-                        message: 'maaf, dokumen ini sudah di acc'
-                    })
-                }
-            }
-        }
-        res.status(2000).json({
-            ta: ta
-        })
-    } catch (error) {
-        console.log(error)
-        res.status(400).json({
-
-        })
-    }
-}
-
-controller.editprogress = async (req, res) => {
-    try {
-        const nim = req.user.nomorinduk
-        const jenisFile = req.params.jenisFile
-        const tugasAkhir = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        })
-        const filePath = path.join(__dirname, '..', 'uploads', `${jenisFile}${nim}.${fileExtension}`);
-
-        fs.unlink(filePath, (err) => {
-            if (err) {
-                console.error('Gagal menghapus file:', err);
-            }
-        });
-        if (!req.files || Object.keys(req.files).length === 0) {
-            return res.status(400).json({
-                message: 'Tidak ada file yang diunggah'
-            });
-        }
-        const file = req.files.file;
-        const fileExtension = file.name.split('.').pop();
-        const fileName = `${jenisFile}${nim}.${fileExtension}`;
-
-        file.mv(`uploads/${fileName}`, async (err) => {
-            if (err) {
-                console.log(err)
-                return res.status(500).json({
-                    message: 'Terjadi kesalahan saat mengunggah file'
-                });
-            }
-
-            const currentDate = Sequelize.literal('CURRENT_TIMESTAMP')
-            if (jenisFile === 'proposal') {
-                await models.tugasAkhir.update({
-
-                    proposal: fileName,
-                    tanggal_proposal: currentDate,
-                    status_proposal: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab1') {
-                await models.tugasAkhir.update({
-
-                    bab1: fileName,
-                    tanggal_bab1: currentDate,
-                    status_bab1: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab2') {
-                await models.tugasAkhir.update({
-
-                    bab2: fileName,
-                    tanggal_bab2: currentDate,
-                    status_bab2: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab3') {
-                await models.tugasAkhir.update({
-
-                    bab3: fileName,
-                    tanggal_bab3: currentDate,
-                    status_bab3: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab4') {
-                await models.tugasAkhir.update({
-
-                    bab4: fileName,
-                    tanggal_bab4: currentDate,
-                    status_bab4: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab5') {
-                await models.tugasAkhir.update({
-
-                    bab5: fileName,
-                    tanggal_bab5: currentDate,
-                    status_bab5: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            } else if (jenisFile === 'bab6') {
-                await models.tugasAkhir.update({
-
-                    bab6: fileName,
-                    tanggal_bab6: currentDate,
-                    status_bab6: 'pengajuan'
-                }, {
-                    where: {
-                        nim: nim,
-                    }
-                })
-            }
-            res.statuss(200).json({
-                tugasAkhir: tugasAkhir
-            })
-        });
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 
-// deletedokumen
-controller.deleteProposal = async (req, res) => {
 
-    try {
-        const nim = req.user.nomorinduk;
 
-        const ta = await models.tugasAkhir.findOne({
-            where: {
-                nim: nim
-            }
-        });
-        if (!ta) {
-            return res.status(404).json({
-                pesan: 'Dokumen tidak ditemukan.'
-            });
-        }
 
-        const filePath = path.join(__dirname, '..', 'uploads', ta.proposal);
-        const status = ta.status_proposal
-        if (status !== 'accept') {
-            fs.unlink(filePath, (err) => {
-                if (err) {
-                    console.error('Gagal menghapus file:', err);
-                }
-            });
-            await models.tugasAkhir.update({
-                proposal: null,
-                status_proposal: null
-            }, {
-                where: {
-                    nim: nim
-                }
-            })
-        }
-
-        return res.json({
-            pesan: "berhasil menghapus data"
-        })
-    } catch (err) {
-        console.log(err)
-    }
-}
 
 // view dokumen
 controller.detailDokumen = async (req, res) => {
@@ -681,7 +484,5 @@ controller.detailDokumen = async (req, res) => {
 // }
 
 //tampil pengajuan sidang
-controller.tampilPengajuanSidang = async (req, res) => {
 
-}
 module.exports = controller
